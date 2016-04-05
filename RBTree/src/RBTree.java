@@ -22,7 +22,7 @@ public class RBTree {
 	}
 
 	public static class RBNode {
-		
+
 		public RBNode(int key, String value, RBNode parent) {
 			this.isRed = true;
 			this.key = key;
@@ -31,6 +31,7 @@ public class RBTree {
 			this.left = null;
 			this.right = null;
 		}
+
 		private boolean isRed;
 		private int key;
 		private String value;
@@ -99,10 +100,12 @@ public class RBTree {
 	 * returns the value of an item with key k if it exists in the tree
 	 * otherwise, returns null
 	 */
+
 	public String search(int k) {
 		if (this.empty())
 			return null;
 		RBNode node = this.root;
+
 		while (!node.equals(null)) {
 			if (node.key == k)
 				return node.value;
@@ -122,9 +125,9 @@ public class RBTree {
 	 * switches, or 0 if no color switches were necessary. returns -1 if an item
 	 * with key k already exists in the tree.
 	 */
+
 	public int insert(int k, String v) {
-		if (empty())
-		{
+		if (empty()) {
 			this.root = new RBNode(k, v, null);
 			this.root.isRed = false;
 			return 0; // TODO need to check if 0 or 1
@@ -132,15 +135,15 @@ public class RBTree {
 		RBNode y = treePosition(this.root, k);
 		if (y.key == k)
 			return -1;
-		
+
 		RBNode z = new RBNode(k, v, y);
-		
+
 		if (k < y.key)
 			y.left = z;
 		else
 			y.right = z;
-		return insertFixup (z);
-		
+		return insertFixup(z);
+
 	}
 
 	/**
@@ -198,9 +201,9 @@ public class RBTree {
 		int i = 0;
 		if (this.empty()) // check if empty
 			return arr;
-		
+
 		RBNode node = root;
-		while (node.left != null) {	// go to minimum
+		while (node.left != null) { // go to minimum
 			node = node.left;
 		}
 
@@ -223,9 +226,9 @@ public class RBTree {
 		int i = 0;
 		if (this.empty()) // check if empty
 			return arr;
-		
+
 		RBNode node = root;
-		while (node.left != null) {	// go to minimum
+		while (node.left != null) { // go to minimum
 			node = node.left;
 		}
 
@@ -256,40 +259,39 @@ public class RBTree {
 	 * precondition: none postcondition: none
 	 */
 	public int rank(int k) {
-		if (this.empty())	// checking "edge" cases
+		if (this.empty()) // checking "edge" cases
 			return 0;
-		
+
 		RBNode node = this.root;
-		RBNode parent = this.root;	// save the parent for later use
+		RBNode parent = this.root; // save the parent for later use
 		while (!node.equals(null)) {
 			if (node.key == k) {
 				parent = node;
 				break;
-			}
-			else if (node.key > k) {
+			} else if (node.key > k) {
 				parent = node;
 				node = node.left;
-			}
-			else {
+			} else {
 				parent = node;
 				node = node.right;
 			}
 		}
 		int count = -1;
 		if (node.equals(null)) {
-			node = parent;	// saved parent so we can go back if k isn't in the tree
+			node = parent; // saved parent so we can go back if k isn't in the
+							// tree
 			if (node.key < k)
 				count += 1;
 		}
-		
-		while (!node.equals(null)) {	// start counting number of predecessors
+
+		while (!node.equals(null)) { // start counting number of predecessors
 			node = predeccesor(node);
 			count++;
 		}
-		return count;	// will always be >= 0
+		return count; // will always be >= 0
 	}
 
-	private RBNode succesor(RBNode node) { // need to FIX TO RETURN ALSO NULL
+	private RBNode succesor(RBNode node) {
 		RBNode next = node;
 		if (!next.right.equals(null)) { // case 1, node has right subtree
 			next = next.right;
@@ -323,58 +325,47 @@ public class RBTree {
 		}
 	}
 
-	private void leftChild (RBNode x, RBNode y)
-	{
+	private void leftChild(RBNode x, RBNode y) {
 		x.left = y;
 		y.parent = x;
 	}
-	
-	private void rightChild (RBNode x, RBNode y)
-	{
+
+	private void rightChild(RBNode x, RBNode y) {
 		x.right = y;
 		y.parent = x;
 	}
-	
-	private void transplant (RBNode x, RBNode y)
-	{
-		if (x == x.parent.left)
-		{
+
+	private void transplant(RBNode x, RBNode y) {
+		if (x == x.parent.left) {
 			leftChild(x.parent, y);
-		}
-		else
-		{
+		} else {
 			rightChild(x, y);
 		}
 	}
-	
-	private void replace (RBNode x, RBNode y)
-	{
+
+	private void replace(RBNode x, RBNode y) {
 		transplant(x, y);
 		leftChild(y, x.left);
 		rightChild(y, x.right);
 	}
-	
-	private void leftRotate (RBNode x)
-	{
+
+	private void leftRotate(RBNode x) {
 		RBNode y = x.right;
 		transplant(x, y);
 		rightChild(x, y.left);
 		leftChild(y, x);
 	}
-	
-	private void rightRotate (RBNode x)
-	{
+
+	private void rightRotate(RBNode x) {
 		RBNode y = x.left;
 		transplant(x, y);
 		leftChild(x, y.right);
 		rightChild(y, x);
 	}
-	
-	private RBNode treePosition(RBNode x, int k)
-	{
+
+	private RBNode treePosition(RBNode x, int k) {
 		RBNode y = null;
-		while (x != null)
-		{
+		while (x != null) {
 			y = x;
 			if (k == x.key)
 				return x;
@@ -385,14 +376,12 @@ public class RBTree {
 		}
 		return y;
 	}
-	
-	private int insertFixup(RBNode z) //TODO check this method
+
+	private int insertFixup(RBNode z) // TODO check this method
 	{
 		int changes = 0;
-		while (z.parent.isRed)
-		{
-			if (z.parent == z.parent.parent.left)
-			{
+		while (z.parent.isRed) {
+			if (z.parent == z.parent.parent.left) { // left side
 				RBNode uncle = z.parent.parent.right;
 				if (uncle != null && uncle.isRed == true) // case 1
 				{
@@ -400,11 +389,10 @@ public class RBTree {
 					uncle.isRed = false;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3; // parent, uncle and grand-parent changed color
-					
-				}
-				else
-				{
+					changes += 3; // parent, uncle and grand-parent changed
+									// color
+
+				} else {
 					if (z == z.parent.right) // case 2
 					{
 						z = z.parent;
@@ -416,9 +404,7 @@ public class RBTree {
 					rightRotate(z.parent.parent);
 					changes += 2; // parent and grand-parent changed color
 				}
-			}
-			else
-			{
+			} else { // right side
 				RBNode uncle = z.parent.parent.left;
 				if (uncle != null && uncle.isRed == true) // case 1
 				{
@@ -426,11 +412,10 @@ public class RBTree {
 					uncle.isRed = false;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3; // parent, uncle and grand-parent changed color
-					
-				}
-				else
-				{
+					changes += 3; // parent, uncle and grand-parent changed
+									// color
+
+				} else {
 					if (z == z.parent.left) // case 2
 					{
 						z = z.parent;
@@ -444,7 +429,7 @@ public class RBTree {
 				}
 			}
 		}
-		
+
 		this.root.isRed = false;
 		return changes;
 	}
