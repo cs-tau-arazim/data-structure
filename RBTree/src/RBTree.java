@@ -14,11 +14,17 @@ public class RBTree {
 	 */
 
 	private RBNode root;
+	private int size;
 	
+	public RBTree() {
+		this.size = 0;
+		this.root = null;
+	}
+
 	public static class RBNode {
 		private boolean isRed;
 		private int key;
-		private int value;
+		private String value;
 		
 		private RBNode parent;
 		private RBNode left;
@@ -30,7 +36,7 @@ public class RBTree {
 		public int getKey() {
 			return key;
 		}
-		public int getValue() {
+		public String getValue() {
 			return value;
 		}
 		public RBNode getParent() {
@@ -74,7 +80,7 @@ public class RBTree {
 	 *
 	 */
 	public RBNode getRoot() {
-		return null; // to be replaced by student code
+		return this.root; 
 	}
 
 	/**
@@ -84,7 +90,7 @@ public class RBTree {
 	 *
 	 */
 	public boolean empty() {
-		return false; // to be replaced by student code
+		return (this.root == null);
 	}
 
 	/**
@@ -128,7 +134,14 @@ public class RBTree {
 	 * if the tree is empty
 	 */
 	public String min() {
-		return "42"; // to be replaced by student code
+		if (empty())
+			return null;
+		RBNode current = this.root; 
+		while (current.left != null)
+		{
+			current = current.left;
+		}
+		return current.value;
 	}
 
 	/**
@@ -138,7 +151,14 @@ public class RBTree {
 	 * if the tree is empty
 	 */
 	public String max() {
-		return "42"; // to be replaced by student code
+		if (empty())
+			return null;
+		RBNode current = this.root; 
+		while (current.right != null)
+		{
+			current = current.right;
+		}
+		return current.value;
 	}
 
 	/**
@@ -190,4 +210,15 @@ public class RBTree {
 	 * this file, not in another file.
 	 */
 
+	public void leftChild (RBNode x, RBNode y)
+	{
+		x.left = y;
+		y.parent = x;
+	}
+	
+	public void rightChild (RBNode x, RBNode y)
+	{
+		x.right = y;
+		y.parent = x;
+	}
 }
