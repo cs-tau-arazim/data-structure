@@ -191,7 +191,7 @@ public class RBTree {
 	 * precondition: none postcondition: none
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+		return this.size;
 	}
 
 	/**
@@ -210,15 +210,67 @@ public class RBTree {
 	 * this file, not in another file.
 	 */
 
-	public void leftChild (RBNode x, RBNode y)
+	private void leftChild (RBNode x, RBNode y)
 	{
 		x.left = y;
 		y.parent = x;
 	}
 	
-	public void rightChild (RBNode x, RBNode y)
+	private void rightChild (RBNode x, RBNode y)
 	{
 		x.right = y;
 		y.parent = x;
 	}
+	
+	private void transplant (RBNode x, RBNode y)
+	{
+		if (x == x.parent.left)
+		{
+			leftChild(x.parent, y);
+		}
+		else
+		{
+			rightChild(x, y);
+		}
+	}
+	
+	private void replace (RBNode x, RBNode y)
+	{
+		transplant(x, y);
+		leftChild(y, x.left);
+		rightChild(y, x.right);
+	}
+	
+	private void leftRotate (RBNode x)
+	{
+		RBNode y = x.right;
+		transplant(x, y);
+		rightChild(x, y.left);
+		leftChild(y, x);
+	}
+	
+	private void rightRotate (RBNode x)
+	{
+		RBNode y = x.left;
+		transplant(x, y);
+		leftChild(x, y.right);
+		rightChild(y, x);
+	}
+	
+	private RBNode treePosition(RBNode x, int k)
+	{
+		RBNode y = null;
+		while (x != null)
+		{
+			y = x;
+			if (k == x.key)
+				return x;
+			else if (k < x.key)
+				x = x.left;
+			else
+				x = x.right;
+		}
+		return y;
+	}
+	
 }
