@@ -22,6 +22,15 @@ public class RBTree {
 	}
 
 	public static class RBNode {
+		
+		public RBNode(int key, String value, RBNode parent) {
+			this.isRed = true;
+			this.key = key;
+			this.value = value;
+			this.parent = parent;
+			this.left = null;
+			this.right = null;
+		}
 		private boolean isRed;
 		private int key;
 		private String value;
@@ -114,7 +123,24 @@ public class RBTree {
 	 * with key k already exists in the tree.
 	 */
 	public int insert(int k, String v) {
-		return 42; // to be replaced by student code
+		if (empty())
+		{
+			this.root = new RBNode(k, v, null);
+			this.root.isRed = false;
+			return 0; // TODO need to check if 0 or 1
+		}
+		RBNode y = treePosition(this.root, k);
+		if (y.key == k)
+			return -1;
+		
+		RBNode z = new RBNode(k, v, y);
+		
+		if (k < y.key)
+			y.left = z;
+		else
+			y.right = z;
+		return insertFixup (z);
+		
 	}
 
 	/**
@@ -360,4 +386,66 @@ public class RBTree {
 		return y;
 	}
 	
+	private int insertFixup(RBNode z) //TODO check this method
+	{
+		int changes = 0;
+		while (z.parent.isRed)
+		{
+			if (z.parent == z.parent.parent.left)
+			{
+				RBNode uncle = z.parent.parent.right;
+				if (uncle != null && uncle.isRed == true) // case 1
+				{
+					z.parent.isRed = false;
+					uncle.isRed = false;
+					z.parent.parent.isRed = true;
+					z = z.parent.parent;
+					changes += 3; // parent, uncle and grand-parent changed color
+					
+				}
+				else
+				{
+					if (z == z.parent.right) // case 2
+					{
+						z = z.parent;
+						leftRotate(z);
+					}
+					// case 3
+					z.parent.isRed = false;
+					z.parent.parent.isRed = true;
+					rightRotate(z.parent.parent);
+					changes += 2; // parent and grand-parent changed color
+				}
+			}
+			else
+			{
+				RBNode uncle = z.parent.parent.left;
+				if (uncle != null && uncle.isRed == true) // case 1
+				{
+					z.parent.isRed = false;
+					uncle.isRed = false;
+					z.parent.parent.isRed = true;
+					z = z.parent.parent;
+					changes += 3; // parent, uncle and grand-parent changed color
+					
+				}
+				else
+				{
+					if (z == z.parent.left) // case 2
+					{
+						z = z.parent;
+						leftRotate(z);
+					}
+					// case 3
+					z.parent.isRed = false;
+					z.parent.parent.isRed = true;
+					rightRotate(z.parent.parent);
+					changes += 2; // parent and grand-parent changed color
+				}
+			}
+		}
+		
+		this.root.isRed = false;
+		return changes;
+	}
 }
