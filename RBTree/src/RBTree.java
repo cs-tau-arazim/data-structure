@@ -172,11 +172,16 @@ public class RBTree {
 		int i = 0;
 		if (this.empty()) // check if empty
 			return arr;
-		RBNode node = findMAX;
-		RBNode max = findMIN;
-		while (!node.equals(max)) {
-			arr[i] = node.key;
+		
+		RBNode node = root;
+		while (node.left != null) {	// go to minimum
+			node = node.left;
+		}
 
+		while (!node.equals(null)) {
+			arr[i] = node.key;
+			node = succesor(node);
+			i++;
 		}
 		return arr;
 	}
@@ -188,8 +193,22 @@ public class RBTree {
 	 * respective keys, or an empty array if the tree is empty.
 	 */
 	public String[] valuesToArray() {
-		String[] arr = new String[42]; // to be replaced by student code
-		return arr; // to be replaced by student code
+		String[] arr = new String[size]; // new array with appropriate size
+		int i = 0;
+		if (this.empty()) // check if empty
+			return arr;
+		
+		RBNode node = root;
+		while (node.left != null) {	// go to minimum
+			node = node.left;
+		}
+
+		while (!node.equals(null)) {
+			arr[i] = node.value;
+			node = succesor(node);
+			i++;
+		}
+		return arr;
 	}
 
 	/**
@@ -211,10 +230,40 @@ public class RBTree {
 	 * precondition: none postcondition: none
 	 */
 	public int rank(int k) {
-		return 42; // to be replaced by student code
+		if (this.empty())	// checking "edge" cases
+			return 0;
+		
+		RBNode node = this.root;
+		RBNode parent = this.root;	// save the parent for later use
+		while (!node.equals(null)) {
+			if (node.key == k) {
+				parent = node;
+				break;
+			}
+			else if (node.key > k) {
+				parent = node;
+				node = node.left;
+			}
+			else {
+				parent = node;
+				node = node.right;
+			}
+		}
+		int count = -1;
+		if (node.equals(null)) {
+			node = parent;	// saved parent so we can go back if k isn't in the tree
+			if (node.key < k)
+				count += 1;
+		}
+		
+		while (!node.equals(null)) {	// start counting number of predecessors
+			node = predeccesor(node);
+			count++;
+		}
+		return count;	// will always be >= 0
 	}
 
-	private RBNode succesor(RBNode node) {
+	private RBNode succesor(RBNode node) { // need to FIX TO RETURN ALSO NULL
 		RBNode next = node;
 		if (!next.right.equals(null)) { // case 1, node has right subtree
 			next = next.right;
@@ -311,4 +360,4 @@ public class RBTree {
 		return y;
 	}
 	
-
+}
