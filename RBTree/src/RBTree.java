@@ -15,7 +15,7 @@ public class RBTree {
 
 	private RBNode root;
 	private int size;
-	
+
 	public RBTree() {
 		this.size = 0;
 		this.root = null;
@@ -25,52 +25,43 @@ public class RBTree {
 		private boolean isRed;
 		private int key;
 		private String value;
-		
+
 		private RBNode parent;
 		private RBNode left;
 		private RBNode right;
-		
+
 		public boolean isRed() {
 			return isRed;
 		}
+
 		public int getKey() {
 			return key;
 		}
+
 		public String getValue() {
 			return value;
 		}
+
 		public RBNode getParent() {
 			return parent;
 		}
+
 		public RBNode getLeft() {
 			return left;
 		}
+
 		public RBNode getRight() {
 			return right;
 		}
-		
+
 		/*
-		public void setRed(boolean isRed) {
-			this.isRed = isRed;
-		}
-		public void setKey(int key) {
-			this.key = key;
-		}
-		public void setValue(int value) {
-			this.value = value;
-		}
-		public void setParent(RBNode parent) {
-			this.parent = parent;
-		}
-		public void setLeft(RBNode left) {
-			this.left = left;
-		}
-		public void setRight(RBNode right) {
-			this.right = right;
-		}
-		*/
-		
-		
+		 * public void setRed(boolean isRed) { this.isRed = isRed; } public void
+		 * setKey(int key) { this.key = key; } public void setValue(int value) {
+		 * this.value = value; } public void setParent(RBNode parent) {
+		 * this.parent = parent; } public void setLeft(RBNode left) { this.left
+		 * = left; } public void setRight(RBNode right) { this.right = right; }
+		 */
+
 	}
 
 	/**
@@ -80,7 +71,7 @@ public class RBTree {
 	 *
 	 */
 	public RBNode getRoot() {
-		return this.root; 
+		return this.root;
 	}
 
 	/**
@@ -100,7 +91,18 @@ public class RBTree {
 	 * otherwise, returns null
 	 */
 	public String search(int k) {
-		return "42"; // to be replaced by student code
+		if (this.empty())
+			return null;
+		RBNode node = this.root;
+		while (!node.equals(null)) {
+			if (node.key == k)
+				return node.value;
+			else if (node.key > k)
+				node = node.left;
+			else
+				node = node.right;
+		}
+		return null;
 	}
 
 	/**
@@ -136,9 +138,8 @@ public class RBTree {
 	public String min() {
 		if (empty())
 			return null;
-		RBNode current = this.root; 
-		while (current.left != null)
-		{
+		RBNode current = this.root;
+		while (current.left != null) {
 			current = current.left;
 		}
 		return current.value;
@@ -153,9 +154,8 @@ public class RBTree {
 	public String max() {
 		if (empty())
 			return null;
-		RBNode current = this.root; 
-		while (current.right != null)
-		{
+		RBNode current = this.root;
+		while (current.right != null) {
 			current = current.right;
 		}
 		return current.value;
@@ -168,8 +168,17 @@ public class RBTree {
 	 * array if the tree is empty.
 	 */
 	public int[] keysToArray() {
-		int[] arr = new int[42]; // to be replaced by student code
-		return arr; // to be replaced by student code
+		int[] arr = new int[size]; // new array with appropriate size
+		int i = 0;
+		if (this.empty()) // check if empty
+			return arr;
+		RBNode node = findMAX;
+		RBNode max = findMIN;
+		while (!node.equals(max)) {
+			arr[i] = node.key;
+
+		}
+		return arr;
 	}
 
 	/**
@@ -205,10 +214,39 @@ public class RBTree {
 		return 42; // to be replaced by student code
 	}
 
-	/**
-	 * If you wish to implement classes, other than RBTree and RBNode, do it in
-	 * this file, not in another file.
-	 */
+	private RBNode succesor(RBNode node) {
+		RBNode next = node;
+		if (!next.right.equals(null)) { // case 1, node has right subtree
+			next = next.right;
+			while (!next.left.equals(null))
+				next = next.left;
+			return next;
+		} else { // case 2, node doesn't have right subtree
+			RBNode parent = node.parent;
+			while (!parent.equals(null) && node.equals(parent.right)) {
+				node = parent;
+				parent = node.parent;
+			}
+			return parent;
+		}
+	}
+
+	private RBNode predeccesor(RBNode node) {
+		RBNode next = node;
+		if (!next.left.equals(null)) { // case 1, node has left subtree
+			next = next.left;
+			while (!next.right.equals(null))
+				next = next.right;
+			return next;
+		} else { // case 2, node doesn't have left subtree
+			RBNode parent = node.parent;
+			while (!parent.equals(null) && node.equals(parent.left)) {
+				node = parent;
+				parent = node.parent;
+			}
+			return parent;
+		}
+	}
 
 	private void leftChild (RBNode x, RBNode y)
 	{
@@ -273,4 +311,4 @@ public class RBTree {
 		return y;
 	}
 	
-}
+
