@@ -15,7 +15,11 @@ public class RBTree {
 
 	private RBNode root;
 	private int size;
-
+	/*
+	 * public RBTree()
+	 * 
+	 * אBuilds an empty red-black tree.
+	 */
 	public RBTree() {
 		this.size = 0;
 		this.root = null;
@@ -39,6 +43,7 @@ public class RBTree {
 		private RBNode parent;
 		private RBNode left;
 		private RBNode right;
+<<<<<<< Updated upstream
 
 		public boolean isRed() {
 			return isRed;
@@ -75,6 +80,8 @@ public class RBTree {
 		 * = left; } public void setRight(RBNode right) { this.right = right; }
 		 */
 
+=======
+>>>>>>> Stashed changes
 	}
 	
 	private boolean isRed(RBNode z)
@@ -131,7 +138,7 @@ public class RBTree {
 			return null;
 		RBNode node = this.root;
 
-		while (node != (null)) {
+		while (node != null) {
 			if (node.key == k)
 				return node.value;
 			else if (node.key > k)
