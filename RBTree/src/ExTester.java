@@ -148,7 +148,7 @@ public class ExTester {
 			myTree.insert(keys[j]);
 			if (!checkSearch(rbTree, myTree))
 			{
-				System.out.println("no");
+				System.out.println(j);
 				return false;
 			}
 			

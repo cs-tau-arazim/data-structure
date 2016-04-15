@@ -13,6 +13,8 @@ public class RBTree {
 	 * public class RBNode
 	 */
 
+	private final RBNode nil = new RBNode(Integer.MAX_VALUE, null, null);
+	//private final RBNode nil = new RBNode(0,null,null);
 	private RBNode root;
 	private int size;
 	/*
@@ -23,6 +25,7 @@ public class RBTree {
 	public RBTree() {
 		this.size = 0;
 		this.root = null;
+		this.nil.isRed = false;
 	}
 
 	public static class RBNode {
@@ -43,7 +46,7 @@ public class RBTree {
 		private RBNode parent;
 		private RBNode left;
 		private RBNode right;
-<<<<<<< Updated upstream
+
 
 		public boolean isRed() {
 			return isRed;
@@ -80,8 +83,6 @@ public class RBTree {
 		 * = left; } public void setRight(RBNode right) { this.right = right; }
 		 */
 
-=======
->>>>>>> Stashed changes
 	}
 	
 	private boolean isRed(RBNode z)
@@ -113,6 +114,7 @@ public class RBTree {
 	 *
 	 */
 	public RBNode getRoot() {
+		this.root = this.nil.left;
 		return this.root;
 	}
 
@@ -123,7 +125,7 @@ public class RBTree {
 	 *
 	 */
 	public boolean empty() {
-		return (this.root == null);
+		return (getRoot() == null);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class RBTree {
 	public String search(int k) {
 		if (this.empty())
 			return null;
-		RBNode node = this.root;
+		RBNode node = getRoot();
 
 		while (node != null) {
 			if (node.key == k)
@@ -160,12 +162,13 @@ public class RBTree {
 
 	public int insert(int k, String v) {
 		if (empty()) {
-			this.root = new RBNode(k, v, null);
+			this.root = new RBNode(k, v, this.nil);
+			nil.left = this.root;
 			this.root.isRed = false;
 			this.size += 1;
 			return 0; // TODO need to check if 0 or 1
 		}
-		RBNode y = treePosition(this.root, k);
+		RBNode y = treePosition(getRoot(), k);
 		if (y.key == k)
 			return -1;
 
@@ -178,6 +181,7 @@ public class RBTree {
 
 		this.size += 1;
 		return insertFixup(z);
+		//return 0;
 
 	}
 
@@ -192,7 +196,7 @@ public class RBTree {
 	public int delete(int k) {
 		if (empty())
 			return -1;
-		RBNode z = treePosition(this.root, k);
+		RBNode z = treePosition(getRoot(), k);
 		RBNode x;
 
 		if (z.key == k)
@@ -232,7 +236,7 @@ public class RBTree {
 		if (node == null)
 			return 0;
 
-		while (node != root && !isRed(node)) {
+		while (node != getRoot() && !isRed(node)) {
 			if (node == left(node.parent)) {
 				RBNode w = right(node.parent);
 				if (w != null && isRed(w)) { // case 1
@@ -258,7 +262,7 @@ public class RBTree {
 					node.parent.isRed = false;
 					right(w).isRed = false;
 					leftRotate(node.parent);
-					node = root;
+					node = getRoot();
 					changes += 2;
 				}
 
@@ -288,7 +292,7 @@ public class RBTree {
 					node.parent.isRed = false;
 					left(w).isRed = false;
 					rightRotate(node.parent);
-					node = root;
+					node = getRoot();
 					changes += 2;
 				}
 			}
@@ -306,7 +310,7 @@ public class RBTree {
 	public String min() {
 		if (empty())
 			return null;
-		RBNode current = this.root;
+		RBNode current = getRoot();
 		while (left(current) != null) {
 			current = left(current);
 		}
@@ -322,7 +326,7 @@ public class RBTree {
 	public String max() {
 		if (empty())
 			return null;
-		RBNode current = this.root;
+		RBNode current = getRoot();
 		while (right(current) != null) {
 			current = right(current);
 		}
@@ -341,7 +345,7 @@ public class RBTree {
 		if (this.empty()) // check if empty
 			return arr;
 
-		RBNode node = root;
+		RBNode node = getRoot();
 		while (left(node) != null) { // go to minimum
 			node = left(node);
 		}
@@ -366,7 +370,7 @@ public class RBTree {
 		if (this.empty()) // check if empty
 			return arr;
 
-		RBNode node = root;
+		RBNode node = getRoot();
 		while (left(node) != null) { // go to minimum
 			node = left(node);
 		}
@@ -401,8 +405,8 @@ public class RBTree {
 		if (this.empty()) // checking "edge" cases
 			return 0;
 
-		RBNode node = this.root;
-		RBNode parent = this.root; // save the parent for later use
+		RBNode node = getRoot();
+		RBNode parent = getRoot(); // save the parent for later use
 		while (node != null) {
 			if (node.key == k) {
 				parent = node;
@@ -575,8 +579,21 @@ public class RBTree {
 				}
 			}
 		}
-
+		getRoot();
 		this.root.isRed = false;
 		return changes;
+	}
+	
+	public String toString(RBNode n)
+	{
+		String c;
+		if (n == null)
+			return "";
+		if (isRed(n))
+			c = "R";
+		else
+			c = "B";
+		
+		return " (" + toString(n.left) +  n.key + c + toString(n.right) + ") ";
 	}
 }
