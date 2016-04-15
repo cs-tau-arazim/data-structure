@@ -195,6 +195,82 @@ public class RBTree {
 		
 		
 	}
+	
+	/**
+	 * public int deleteFixup(RBNode node)
+	 * 
+	 * fixes the Red-Black Tree in terms of making sure all of its properties
+	 * remains- black length, etc. returns number of color changes made.
+	 */
+	public int deleteFixup(RBNode node) {
+		int changes = 0;
+		if (node == null)
+			return 0;
+		
+		while (node != root && !node.isRed) {
+			if (node == node.parent.left) {
+				RBNode w = node.parent.right;
+				if (w != null && w.isRed) { // case 1
+					w.isRed = false;
+					node.parent.isRed = true;
+					leftRotate(node.parent);
+					w = node.parent.right;
+					changes += 2;
+				}
+				if (!w.left.isRed && !w.right.isRed) { // case 2
+					w.isRed = true;
+					node = node.parent;
+					changes += 1;
+				} else {
+					if (!w.right.isRed) { // case 3
+
+						w.left.isRed = false;
+						w.isRed = true;
+						rightRotate(w);
+						changes += 2;
+					}	// case 4
+					w.isRed = node.parent.isRed;
+					node.parent.isRed = false;
+					w.right.isRed = false;
+					leftRotate(node.parent);
+					node = root;
+					changes += 2;
+				}
+				
+			}
+			if (node == node.parent.right) {
+				RBNode w = node.parent.left;
+				if (w != null && w.isRed) { // case 1
+					w.isRed = false;
+					node.parent.isRed = true;
+					rightRotate(node.parent);
+					w = node.parent.left;
+					changes += 2;
+				}
+				if (!w.right.isRed && !w.left.isRed) { // case 2
+					w.isRed = true;
+					node = node.parent;
+					changes += 1;
+				} else {
+					if (!w.left.isRed) { // case 3
+
+						w.right.isRed = false;
+						w.isRed = true;
+						leftRotate(w);
+						changes += 2;
+					}	// case 4
+					w.isRed = node.parent.isRed;
+					node.parent.isRed = false;
+					w.left.isRed = false;
+					rightRotate(node.parent);
+					node = root;
+					changes += 2;
+				}
+			}
+		}
+		node.isRed = false;
+		return changes;
+	}
 
 	/**
 	 * public String min()
