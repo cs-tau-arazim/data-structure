@@ -14,9 +14,10 @@ public class RBTree {
 	 */
 
 	private final RBNode nil = new RBNode(Integer.MAX_VALUE, null, null);
-	//private final RBNode nil = new RBNode(0,null,null);
+	// private final RBNode nil = new RBNode(0,null,null);
 	private RBNode root;
 	private int size;
+
 	/*
 	 * public RBTree()
 	 * 
@@ -47,7 +48,6 @@ public class RBTree {
 		private RBNode left;
 		private RBNode right;
 
-
 		public boolean isRed() {
 			return isRed;
 		}
@@ -72,9 +72,6 @@ public class RBTree {
 			return right;
 		}
 
-		
-		
-		
 		/*
 		 * public void setRed(boolean isRed) { this.isRed = isRed; } public void
 		 * setKey(int key) { this.key = key; } public void setValue(int value) {
@@ -84,23 +81,22 @@ public class RBTree {
 		 */
 
 	}
-	
-	private boolean isRed(RBNode z)
-	{
+
+	private boolean isRed(RBNode z) {
 		if (z == null)
 			return false;
 		else
 			return z.isRed;
 	}
-	private RBNode right(RBNode z)
-	{
+
+	private RBNode right(RBNode z) {
 		if (z == null)
 			return null;
 		else
 			return z.right;
 	}
-	private RBNode left(RBNode z)
-	{
+
+	private RBNode left(RBNode z) {
 		if (z == null)
 			return null;
 		else
@@ -134,21 +130,18 @@ public class RBTree {
 	 * returns the value of an item with key k if it exists in the tree
 	 * otherwise, returns null
 	 */
+	private String treeSearch(RBNode node, int k) {
+		while (node != null && k != node.key) {
+			if (k < node.key)
+				node = node.left;
+			else
+				node = node.right;
+		}
+		return node.value;
+	}
 
 	public String search(int k) {
-		if (this.empty())
-			return null;
-		RBNode node = getRoot();
-
-		while (node != null) {
-			if (node.key == k)
-				return node.value;
-			else if (node.key > k)
-				node = left(node);
-			else
-				node = right(node);
-		}
-		return null;
+		return treeSearch(root, k);
 	}
 
 	/**
@@ -160,29 +153,32 @@ public class RBTree {
 	 * with key k already exists in the tree.
 	 */
 
-	public int insert(int k, String v) {
-		if (empty()) {
-			this.root = new RBNode(k, v, this.nil);
-			nil.left = this.root;
-			this.root.isRed = false;
-			this.size += 1;
-			return 0; // TODO need to check if 0 or 1
+	public int insert(RBNode z) {
+		RBNode y = nil;
+		RBNode x = root;
+		while (x != nil) {
+			y = x;
+			if (z.key < x.key)
+				x = x.left;
+			else
+				x = x.right;
 		}
-		RBNode y = treePosition(getRoot(), k);
-		if (y.key == k)
-			return -1;
-
-		RBNode z = new RBNode(k, v, y);
-
-		if (k < y.key)
+		z.parent = y;
+		if (y == nil)
+			root = z;
+		else if (z.key < y.key)
 			y.left = z;
 		else
 			y.right = z;
-
-		this.size += 1;
+		z.left = nil;
+		z.right = nil;
+		z.isRed = true;
 		return insertFixup(z);
-		//return 0;
+	}
 
+	public int insert(int k, String v) {
+		RBNode z = new RBNode(k, v, this.nil);
+		return insert(z);
 	}
 
 	/**
@@ -436,6 +432,7 @@ public class RBTree {
 
 	private RBNode succesor(RBNode node) {
 		RBNode next = node;
+
 		if (right(next) != null) { // case 1, node has right subtree
 			next = right(next);
 			while (left(next) != null)
@@ -497,20 +494,46 @@ public class RBTree {
 	}
 
 	private void leftRotate(RBNode x) {
-		RBNode y = right(x);
-		transplant(x, y);
-		rightChild(x, left(y));
-		if (y != null)
-			leftChild(y, x);
+		RBNode y = x.right;
+		x.right = y.left;
+		if (y.left != nil)
+			y.left.parent = x;
+		y.parent = x.parent;
+		if (x.parent == nil)
+			root = y;
+		else if (x == x.parent.left)
+			x.parent.left = y;
+		else
+			x.parent.right = y;
+		y.left = x;
+		x.parent = y;
 	}
 
 	private void rightRotate(RBNode x) {
-		RBNode y = left(x);
-		transplant(x, y);
-		leftChild(x, right(y));
-		if (y!= null)
-			rightChild(y, x);
+		RBNode y = x.left;
+		x.left = y.right;
+		if (y.right != nil)
+			y.right.parent = x;
+		y.parent = x.parent;
+		if (x.parent == nil)
+			root = y;
+		else if (x == x.parent.right)
+			x.parent.right = y;
+		else
+			x.parent.left = y;
+		y.right = x;
+		x.parent = y;
 	}
+
+	/*
+	 * private void leftRotate(RBNode x) { RBNode y = right(x); transplant(x,
+	 * y); rightChild(x, left(y)); if (y != null) leftChild(y, x); }
+	 */
+
+	/*
+	 * private void rightRotate(RBNode x) { RBNode y = left(x); transplant(x,
+	 * y); leftChild(x, right(y)); if (y!= null) rightChild(y, x); }
+	 */
 
 	private RBNode treePosition(RBNode x, int k) {
 		RBNode y = null;
@@ -567,7 +590,7 @@ public class RBTree {
 				} else {
 					if (z == left(z.parent)) // case 2
 					{
-						
+
 						z = z.parent;
 						leftRotate(z);
 					}
@@ -583,9 +606,8 @@ public class RBTree {
 		this.root.isRed = false;
 		return changes;
 	}
-	
-	public String toString(RBNode n)
-	{
+
+	public String toString(RBNode n) {
 		String c;
 		if (n == null)
 			return "";
@@ -593,7 +615,7 @@ public class RBTree {
 			c = "R";
 		else
 			c = "B";
-		
-		return " (" + toString(n.left) +  n.key + c + toString(n.right) + ") ";
+
+		return " (" + toString(n.left) + n.key + c + toString(n.right) + ") ";
 	}
 }
