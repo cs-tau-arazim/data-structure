@@ -70,6 +70,7 @@ public class ExTester {
 
 	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
+			//System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i))
 				return false;
 		}
@@ -143,6 +144,7 @@ public class ExTester {
 			myTree.insert(keys[j]);
 			if (!checkSearch(rbTree, myTree))
 				return false;
+			System.out.println("yes");
 		}
 		return true;
 	}

@@ -64,6 +64,9 @@ public class RBTree {
 			return right;
 		}
 
+		
+		
+		
 		/*
 		 * public void setRed(boolean isRed) { this.isRed = isRed; } public void
 		 * setKey(int key) { this.key = key; } public void setValue(int value) {
@@ -72,6 +75,28 @@ public class RBTree {
 		 * = left; } public void setRight(RBNode right) { this.right = right; }
 		 */
 
+	}
+	
+	private boolean isRed(RBNode z)
+	{
+		if (z == null)
+			return false;
+		else
+			return z.isRed;
+	}
+	private RBNode right(RBNode z)
+	{
+		if (z == null)
+			return null;
+		else
+			return z.right;
+	}
+	private RBNode left(RBNode z)
+	{
+		if (z == null)
+			return null;
+		else
+			return z.left;
 	}
 
 	/**
@@ -110,9 +135,9 @@ public class RBTree {
 			if (node.key == k)
 				return node.value;
 			else if (node.key > k)
-				node = node.left;
+				node = left(node);
 			else
-				node = node.right;
+				node = right(node);
 		}
 		return null;
 	}
@@ -166,21 +191,21 @@ public class RBTree {
 		if (z.key == k)
 			return -1;
 
-		boolean initColor = z.isRed;
+		boolean initColor = isRed(z);
 
-		if (z.left == null) {
-			x = z.right;
-			transplant(z, z.right);
-		} else if (z.right == null) {
-			x = z.left;
-			transplant(z, z.left);
+		if (left(z) == null) {
+			x = right(z);
+			transplant(z, right(z));
+		} else if (right(z) == null) {
+			x = left(z);
+			transplant(z, left(z));
 		} else {
 			RBNode y = succesor(z);
-			initColor = y.isRed;
+			initColor = isRed(y);
 			replace(y, z);
-			y.isRed = z.isRed;
-			transplant(z, z.right);
-			x = z.right;
+			y.isRed = isRed(z);
+			transplant(z, right(z));
+			x = right(z);
 		}
 		if (initColor)
 			return 0;
@@ -200,61 +225,61 @@ public class RBTree {
 		if (node == null)
 			return 0;
 
-		while (node != root && !node.isRed) {
-			if (node == node.parent.left) {
-				RBNode w = node.parent.right;
-				if (w != null && w.isRed) { // case 1
+		while (node != root && !isRed(node)) {
+			if (node == left(node.parent)) {
+				RBNode w = right(node.parent);
+				if (w != null && isRed(w)) { // case 1
 					w.isRed = false;
 					node.parent.isRed = true;
 					leftRotate(node.parent);
-					w = node.parent.right;
+					w = right(node.parent);
 					changes += 2;
 				}
-				if (!w.left.isRed && !w.right.isRed) { // case 2
+				if (!isRed(left(w)) && !isRed(right(w))) { // case 2
 					w.isRed = true;
 					node = node.parent;
 					changes += 1;
 				} else {
-					if (!w.right.isRed) { // case 3
+					if (!isRed(right(w))) { // case 3
 
-						w.left.isRed = false;
+						left(w).isRed = false;
 						w.isRed = true;
 						rightRotate(w);
 						changes += 2;
 					} // case 4
-					w.isRed = node.parent.isRed;
+					w.isRed = isRed(node.parent);
 					node.parent.isRed = false;
-					w.right.isRed = false;
+					right(w).isRed = false;
 					leftRotate(node.parent);
 					node = root;
 					changes += 2;
 				}
 
 			}
-			if (node == node.parent.right) {
-				RBNode w = node.parent.left;
-				if (w != null && w.isRed) { // case 1
+			if (node == right(node.parent)) {
+				RBNode w = left(node.parent);
+				if (w != null && isRed(w)) { // case 1
 					w.isRed = false;
 					node.parent.isRed = true;
 					rightRotate(node.parent);
-					w = node.parent.left;
+					w = left(node.parent);
 					changes += 2;
 				}
-				if (!w.right.isRed && !w.left.isRed) { // case 2
+				if (!isRed(right(w)) && !isRed(left(w))) { // case 2
 					w.isRed = true;
 					node = node.parent;
 					changes += 1;
 				} else {
-					if (!w.left.isRed) { // case 3
+					if (!isRed(left(w))) { // case 3
 
-						w.right.isRed = false;
+						right(w).isRed = false;
 						w.isRed = true;
 						leftRotate(w);
 						changes += 2;
 					} // case 4
-					w.isRed = node.parent.isRed;
+					w.isRed = isRed(node.parent);
 					node.parent.isRed = false;
-					w.left.isRed = false;
+					left(w).isRed = false;
 					rightRotate(node.parent);
 					node = root;
 					changes += 2;
@@ -275,8 +300,8 @@ public class RBTree {
 		if (empty())
 			return null;
 		RBNode current = this.root;
-		while (current.left != null) {
-			current = current.left;
+		while (left(current) != null) {
+			current = left(current);
 		}
 		return current.value;
 	}
@@ -291,8 +316,8 @@ public class RBTree {
 		if (empty())
 			return null;
 		RBNode current = this.root;
-		while (current.right != null) {
-			current = current.right;
+		while (right(current) != null) {
+			current = right(current);
 		}
 		return current.value;
 	}
@@ -310,8 +335,8 @@ public class RBTree {
 			return arr;
 
 		RBNode node = root;
-		while (node.left != null) { // go to minimum
-			node = node.left;
+		while (left(node) != null) { // go to minimum
+			node = left(node);
 		}
 
 		while (node != null) {
@@ -335,8 +360,8 @@ public class RBTree {
 			return arr;
 
 		RBNode node = root;
-		while (node.left != null) { // go to minimum
-			node = node.left;
+		while (left(node) != null) { // go to minimum
+			node = left(node);
 		}
 
 		while (node != null) {
@@ -377,10 +402,10 @@ public class RBTree {
 				break;
 			} else if (node.key > k) {
 				parent = node;
-				node = node.left;
+				node = left(node);
 			} else {
 				parent = node;
-				node = node.right;
+				node = right(node);
 			}
 		}
 		int count = -1;
@@ -400,14 +425,14 @@ public class RBTree {
 
 	private RBNode succesor(RBNode node) {
 		RBNode next = node;
-		if (next.right != null) { // case 1, node has right subtree
-			next = next.right;
-			while (next.left != null)
-				next = next.left;
+		if (right(next) != null) { // case 1, node has right subtree
+			next = right(next);
+			while (left(next) != null)
+				next = left(next);
 			return next;
 		} else { // case 2, node doesn't have right subtree
 			RBNode parent = node.parent;
-			while (parent != null && node == parent.right) {
+			while (parent != null && node == right(parent)) {
 				node = parent;
 				parent = node.parent;
 			}
@@ -417,14 +442,14 @@ public class RBTree {
 
 	private RBNode predeccesor(RBNode node) {
 		RBNode next = node;
-		if (next.left != null) { // case 1, node has left subtree
-			next = next.left;
-			while (next.right != null)
-				next = next.right;
+		if (left(next) != null) { // case 1, node has left subtree
+			next = left(next);
+			while (right(next) != null)
+				next = right(next);
 			return next;
 		} else { // case 2, node doesn't have left subtree
 			RBNode parent = node.parent;
-			while (parent != null && node == parent.left) {
+			while (parent != null && node == left(parent)) {
 				node = parent;
 				parent = node.parent;
 			}
@@ -434,16 +459,18 @@ public class RBTree {
 
 	private void leftChild(RBNode x, RBNode y) {
 		x.left = y;
-		y.parent = x;
+		if (y != null)
+			y.parent = x;
 	}
 
 	private void rightChild(RBNode x, RBNode y) {
 		x.right = y;
-		y.parent = x;
+		if (y != null)
+			y.parent = x;
 	}
 
 	private void transplant(RBNode x, RBNode y) {
-		if (x == x.parent.left) {
+		if (x == left(x.parent)) {
 			leftChild(x.parent, y);
 		} else {
 
@@ -454,21 +481,21 @@ public class RBTree {
 
 	private void replace(RBNode x, RBNode y) {
 		transplant(x, y);
-		leftChild(y, x.left);
-		rightChild(y, x.right);
+		leftChild(y, left(x));
+		rightChild(y, right(x));
 	}
 
 	private void leftRotate(RBNode x) {
-		RBNode y = x.right;
+		RBNode y = right(x);
 		transplant(x, y);
-		rightChild(x, y.left);
+		rightChild(x, left(y));
 		leftChild(y, x);
 	}
 
 	private void rightRotate(RBNode x) {
-		RBNode y = x.left;
+		RBNode y = left(x);
 		transplant(x, y);
-		leftChild(x, y.right);
+		leftChild(x, right(y));
 		rightChild(y, x);
 	}
 
@@ -479,9 +506,9 @@ public class RBTree {
 			if (k == x.key)
 				return x;
 			else if (k < x.key)
-				x = x.left;
+				x = left(x);
 			else
-				x = x.right;
+				x = right(x);
 		}
 		return y;
 	}
@@ -489,10 +516,10 @@ public class RBTree {
 	private int insertFixup(RBNode z) // TODO check this method
 	{
 		int changes = 0;
-		while (z.parent.isRed) {
-			if (z.parent == z.parent.parent.left) { // left side
-				RBNode uncle = z.parent.parent.right;
-				if (uncle != null && uncle.isRed == true) // case 1
+		while (z.parent != null && isRed(z.parent)) {
+			if (z.parent == left(z.parent.parent)) { // left side
+				RBNode uncle = right(z.parent.parent);
+				if (uncle != null && isRed(uncle)) // case 1
 				{
 					z.parent.isRed = false;
 					uncle.isRed = false;
@@ -502,7 +529,7 @@ public class RBTree {
 									// color
 
 				} else {
-					if (z == z.parent.right) // case 2
+					if (z == right(z.parent)) // case 2
 					{
 						z = z.parent;
 						leftRotate(z);
@@ -514,8 +541,8 @@ public class RBTree {
 					changes += 2; // parent and grand-parent changed color
 				}
 			} else { // right side
-				RBNode uncle = z.parent.parent.left;
-				if (uncle != null && uncle.isRed == true) // case 1
+				RBNode uncle = left(z.parent.parent);
+				if (uncle != null && isRed(uncle)) // case 1
 				{
 					z.parent.isRed = false;
 					uncle.isRed = false;
@@ -525,8 +552,9 @@ public class RBTree {
 									// color
 
 				} else {
-					if (z == z.parent.left) // case 2
+					if (z == left(z.parent)) // case 2
 					{
+						
 						z = z.parent;
 						leftRotate(z);
 					}

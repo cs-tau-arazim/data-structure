@@ -64,7 +64,7 @@ class TestRun implements Runnable {
     }
 
     public void run() {
-        try {
+        
         	switch (this.test_num) {
         		case 0: this.success = ExTester.emptyTreeTest();
         				break;
@@ -87,9 +87,7 @@ class TestRun implements Runnable {
         		case 9: this.success = ExTester.doubleDeleteTest();
         				break;
         	}
-        } catch (Exception e) {
-        	System.out.println("Exception on Test " + test_num + " : " + e);
-        }
+       
     }
 }
 
