@@ -8,7 +8,8 @@ public class experiment {
 	static int num = 10000;
 
 	public static void main(String[] args) {
-		for (int i = 0; i < 11; i++)
+		System.out.println("number\toperations\tinsert avg\tdelete avg");
+		for (int i = 1; i < 11; i++)
 			exp(i);
 
 	}
@@ -27,10 +28,14 @@ public class experiment {
 		}
 		list = (list.subList(0, j*num));
 		Collections.sort(list);
+		
+		
+		
 		for (int i = 0; i < j*num; i++) {
 			delChanges += rb.delete(list.get(i));
 		}
-		System.out.println(insChanges + " " + delChanges);
+		
+		System.out.println(j + "\t" + j*num + "\t\t" + Math.round((double)insChanges/(j*num)*10000)/(double)10000 + "\t\t" + Math.round((double)delChanges/(j*num)*10000)/(double)10000);
 	}
 
 }
