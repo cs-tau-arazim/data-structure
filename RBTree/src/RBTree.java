@@ -489,14 +489,16 @@ public class RBTree {
 		RBNode y = right(x);
 		transplant(x, y);
 		rightChild(x, left(y));
-		leftChild(y, x);
+		if (y != null)
+			leftChild(y, x);
 	}
 
 	private void rightRotate(RBNode x) {
 		RBNode y = left(x);
 		transplant(x, y);
 		leftChild(x, right(y));
-		rightChild(y, x);
+		if (y!= null)
+			rightChild(y, x);
 	}
 
 	private RBNode treePosition(RBNode x, int k) {
