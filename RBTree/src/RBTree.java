@@ -645,7 +645,7 @@ public class RBTree {
 			
 		}
 		root.isRed = false;
-
+		changes += 1;
 		
 
 		return changes;
