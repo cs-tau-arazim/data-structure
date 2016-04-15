@@ -130,6 +130,7 @@ public class RBTree {
 		if (empty()) {
 			this.root = new RBNode(k, v, null);
 			this.root.isRed = false;
+			this.size += 1;
 			return 0; // TODO need to check if 0 or 1
 		}
 		RBNode y = treePosition(this.root, k);
@@ -142,7 +143,10 @@ public class RBTree {
 			y.left = z;
 		else
 			y.right = z;
-		return insertFixup(z);
+
+		this.size += 1;
+		return insertFixup (z);
+		
 
 	}
 
@@ -155,7 +159,41 @@ public class RBTree {
 	 * with key k was not found in the tree.
 	 */
 	public int delete(int k) {
-		return 42; // to be replaced by student code
+		if (empty())
+			return -1;
+		RBNode z = treePosition(this.root, k);
+		RBNode x;
+		 
+		if (z.key == k)
+			return -1;
+		
+		boolean initColor = z.isRed;
+		
+		if (z.left == null)
+		{
+			x = z.right;
+			transplant(z, z.right);
+		}
+		else if(z.right == null)
+		{
+			x = z.left;
+			transplant(z, z.left);
+		}
+		else
+		{
+			RBNode y = succesor(z);
+			initColor = y.isRed;
+			replace(y, z);
+			y.isRed = z.isRed;
+			transplant(z, z.right);
+			x = z.right;
+		}
+		if (initColor)
+			return 0;
+		else
+			return deleteFixup(x);
+		
+		
 	}
 
 	/**
@@ -338,8 +376,11 @@ public class RBTree {
 	private void transplant(RBNode x, RBNode y) {
 		if (x == x.parent.left) {
 			leftChild(x.parent, y);
-		} else {
-			rightChild(x, y);
+		}
+		else{
+			
+			rightChild(x.parent, y);
+
 		}
 	}
 
