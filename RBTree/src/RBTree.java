@@ -106,7 +106,7 @@ public class RBTree {
 			return null;
 		RBNode node = this.root;
 
-		while (!node.equals(null)) {
+		while (node != (null)) {
 			if (node.key == k)
 				return node.value;
 			else if (node.key > k)
@@ -145,8 +145,7 @@ public class RBTree {
 			y.right = z;
 
 		this.size += 1;
-		return insertFixup (z);
-		
+		return insertFixup(z);
 
 	}
 
@@ -163,24 +162,19 @@ public class RBTree {
 			return -1;
 		RBNode z = treePosition(this.root, k);
 		RBNode x;
-		 
+
 		if (z.key == k)
 			return -1;
-		
+
 		boolean initColor = z.isRed;
-		
-		if (z.left == null)
-		{
+
+		if (z.left == null) {
 			x = z.right;
 			transplant(z, z.right);
-		}
-		else if(z.right == null)
-		{
+		} else if (z.right == null) {
 			x = z.left;
 			transplant(z, z.left);
-		}
-		else
-		{
+		} else {
 			RBNode y = succesor(z);
 			initColor = y.isRed;
 			replace(y, z);
@@ -192,10 +186,9 @@ public class RBTree {
 			return 0;
 		else
 			return deleteFixup(x);
-		
-		
+
 	}
-	
+
 	/**
 	 * public int deleteFixup(RBNode node)
 	 * 
@@ -206,7 +199,7 @@ public class RBTree {
 		int changes = 0;
 		if (node == null)
 			return 0;
-		
+
 		while (node != root && !node.isRed) {
 			if (node == node.parent.left) {
 				RBNode w = node.parent.right;
@@ -228,7 +221,7 @@ public class RBTree {
 						w.isRed = true;
 						rightRotate(w);
 						changes += 2;
-					}	// case 4
+					} // case 4
 					w.isRed = node.parent.isRed;
 					node.parent.isRed = false;
 					w.right.isRed = false;
@@ -236,7 +229,7 @@ public class RBTree {
 					node = root;
 					changes += 2;
 				}
-				
+
 			}
 			if (node == node.parent.right) {
 				RBNode w = node.parent.left;
@@ -258,7 +251,7 @@ public class RBTree {
 						w.isRed = true;
 						leftRotate(w);
 						changes += 2;
-					}	// case 4
+					} // case 4
 					w.isRed = node.parent.isRed;
 					node.parent.isRed = false;
 					w.left.isRed = false;
@@ -321,7 +314,7 @@ public class RBTree {
 			node = node.left;
 		}
 
-		while (!node.equals(null)) {
+		while (node != null) {
 			arr[i] = node.key;
 			node = succesor(node);
 			i++;
@@ -346,7 +339,7 @@ public class RBTree {
 			node = node.left;
 		}
 
-		while (!node.equals(null)) {
+		while (node != null) {
 			arr[i] = node.value;
 			node = succesor(node);
 			i++;
@@ -378,7 +371,7 @@ public class RBTree {
 
 		RBNode node = this.root;
 		RBNode parent = this.root; // save the parent for later use
-		while (!node.equals(null)) {
+		while (node != null) {
 			if (node.key == k) {
 				parent = node;
 				break;
@@ -391,14 +384,14 @@ public class RBTree {
 			}
 		}
 		int count = -1;
-		if (node.equals(null)) {
+		if (node != null) {
 			node = parent; // saved parent so we can go back if k isn't in the
 							// tree
 			if (node.key < k)
 				count += 1;
 		}
 
-		while (!node.equals(null)) { // start counting number of predecessors
+		while (node != null) { // start counting number of predecessors
 			node = predeccesor(node);
 			count++;
 		}
@@ -407,14 +400,14 @@ public class RBTree {
 
 	private RBNode succesor(RBNode node) {
 		RBNode next = node;
-		if (!next.right.equals(null)) { // case 1, node has right subtree
+		if (next.right != null) { // case 1, node has right subtree
 			next = next.right;
-			while (!next.left.equals(null))
+			while (next.left != null)
 				next = next.left;
 			return next;
 		} else { // case 2, node doesn't have right subtree
 			RBNode parent = node.parent;
-			while (!parent.equals(null) && node.equals(parent.right)) {
+			while (parent != null && node == parent.right) {
 				node = parent;
 				parent = node.parent;
 			}
@@ -424,14 +417,14 @@ public class RBTree {
 
 	private RBNode predeccesor(RBNode node) {
 		RBNode next = node;
-		if (!next.left.equals(null)) { // case 1, node has left subtree
+		if (next.left != null) { // case 1, node has left subtree
 			next = next.left;
-			while (!next.right.equals(null))
+			while (next.right != null)
 				next = next.right;
 			return next;
 		} else { // case 2, node doesn't have left subtree
 			RBNode parent = node.parent;
-			while (!parent.equals(null) && node.equals(parent.left)) {
+			while (parent != null && node == parent.left) {
 				node = parent;
 				parent = node.parent;
 			}
@@ -452,9 +445,8 @@ public class RBTree {
 	private void transplant(RBNode x, RBNode y) {
 		if (x == x.parent.left) {
 			leftChild(x.parent, y);
-		}
-		else{
-			
+		} else {
+
 			rightChild(x.parent, y);
 
 		}
