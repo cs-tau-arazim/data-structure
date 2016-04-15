@@ -14,6 +14,7 @@ public class test1 {
 		for (int i : arr)
 			System.out.println(i);*/
 		//System.out.println(t.toString(t.getRoot()));
+		System.out.println(t.search(1));
 
 		//t.insert(5,"5");
 		

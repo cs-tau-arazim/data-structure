@@ -195,18 +195,20 @@ public class RBTree {
 		z.isRed = true;
 
 		this.size += 1;
-		//System.out.println(toString(z));
 
 		return insertFixup(z);
 	}
 
 	public int insert(int k, String v) {
 		RBNode z = new RBNode(k, v, this.nil);
+		if (k == treePosition(k).key)
+			return -1;
 		return insert(z);
 	}
 
 	/**
-	 * public int delete(int k) f * deletes an item with key k from the binary
+	 * public int delete(int k)
+	 * deletes an item with key k from the binary
 	 * tree, if it is there; the tree must remain valid (keep its invariants).
 	 * returns the number of color switches, or 0 if no color switches were
 	 * needed. returns -1 if an item with key k was not found in the tree.
@@ -240,10 +242,12 @@ public class RBTree {
 				y.right = z.right;
 				y.right.parent = y;
 			}
+			transplant(z,y);
 			y.left = z.left;
 			y.left.parent = y;
 			y.isRed = z.isRed;
 		}
+		size -= 1;
 		if (yColor == false)
 			return deleteFixup(x);
 		return 0;
