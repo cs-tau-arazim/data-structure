@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class ExTester {
 
-	public static final int SIZE = 2048;
+	public static final int SIZE = 300;//TODO
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -70,10 +70,9 @@ public class ExTester {
 
 	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
-			System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i))
 			{
-				System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
+				//System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 				return false;
 			}
 		}
@@ -301,7 +300,7 @@ public class ExTester {
 		Thread test_thread = new Thread(test_runner);
 		test_thread.start();
 		try {
-			test_thread.join(10000);
+			test_thread.join(10000); //TODO
 			if (test_thread.isAlive())
 				System.out.println("Timeout on Test " + test_num);
 		}

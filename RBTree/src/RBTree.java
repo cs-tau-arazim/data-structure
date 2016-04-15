@@ -25,8 +25,11 @@ public class RBTree {
 	 */
 	public RBTree() {
 		this.size = 0;
-		this.root = null;
+		this.root = nil;
 		this.nil.isRed = false;
+		this.nil.right = nil;
+		this.nil.left = nil;
+		nil.parent = nil;
 	}
 
 	public static class RBNode {
@@ -110,7 +113,6 @@ public class RBTree {
 	 *
 	 */
 	public RBNode getRoot() {
-		this.root = this.nil.left;
 		return this.root;
 	}
 
@@ -131,7 +133,7 @@ public class RBTree {
 	 * otherwise, returns null
 	 */
 	private String treeSearch(RBNode node, int k) {
-		while (node != null && k != node.key) {
+		while (node != nil && k != node.key) {
 			if (k < node.key)
 				node = node.left;
 			else
@@ -182,43 +184,46 @@ public class RBTree {
 	}
 
 	/**
-	 * public int delete(int k)
-	 *
-	 * deletes an item with key k from the binary tree, if it is there; the tree
-	 * must remain valid (keep its invariants). returns the number of color
-	 * switches, or 0 if no color switches were needed. returns -1 if an item
-	 * with key k was not found in the tree.
+	 * public int delete(int k) f * deletes an item with key k from the binary
+	 * tree, if it is there; the tree must remain valid (keep its invariants).
+	 * returns the number of color switches, or 0 if no color switches were
+	 * needed. returns -1 if an item with key k was not found in the tree.
 	 */
 	public int delete(int k) {
-		if (empty())
-			return -1;
-		RBNode z = treePosition(getRoot(), k);
+		RBNode z = treePosition(k);
+		RBNode y = z;
 		RBNode x;
-
-		if (z.key == k)
+		if (z == nil) {
 			return -1;
-
-		boolean initColor = isRed(z);
-
-		if (left(z) == null) {
-			x = right(z);
-			transplant(z, right(z));
-		} else if (right(z) == null) {
-			x = left(z);
-			transplant(z, left(z));
-		} else {
-			RBNode y = succesor(z);
-			initColor = isRed(y);
-			replace(y, z);
-			y.isRed = isRed(z);
-			transplant(z, right(z));
-			x = right(z);
 		}
-		if (initColor)
-			return 0;
+		boolean yColor = y.isRed;
+		if (z.left == nil) {
+			x = z.right;
+			transplant(z, z.right);
+		}
+		else if (z.right == nil) {
+			x = z.left;
+			transplant(z, z.left);
+		}
 		else
+		{
+			y =succesor(y);
+			yColor = y.isRed;
+			x = y.right;
+			if (y.parent == z)
+				x.parent = y;
+			else {
+				transplant(y, y.right);
+				y.right = z.right;
+				y.right.parent = y;
+			}
+			y.left = z.left;
+			y.left.parent = y;
+			y.isRed = z.isRed;
+		}
+		if (yColor == false)
 			return deleteFixup(x);
-
+		return 0;
 	}
 
 	/**
@@ -433,14 +438,14 @@ public class RBTree {
 	private RBNode succesor(RBNode node) {
 		RBNode next = node;
 
-		if (right(next) != null) { // case 1, node has right subtree
+		if (right(next) != nil) { // case 1, node has right subtree
 			next = right(next);
-			while (left(next) != null)
+			while (left(next) != nil)
 				next = left(next);
 			return next;
 		} else { // case 2, node doesn't have right subtree
 			RBNode parent = node.parent;
-			while (parent != null && node == right(parent)) {
+			while (parent != nil && node == right(parent)) {
 				node = parent;
 				parent = node.parent;
 			}
@@ -525,93 +530,70 @@ public class RBTree {
 		x.parent = y;
 	}
 
-	/*
-	 * private void leftRotate(RBNode x) { RBNode y = right(x); transplant(x,
-	 * y); rightChild(x, left(y)); if (y != null) leftChild(y, x); }
-	 */
 
-	/*
-	 * private void rightRotate(RBNode x) { RBNode y = left(x); transplant(x,
-	 * y); leftChild(x, right(y)); if (y!= null) rightChild(y, x); }
-	 */
-
-	private RBNode treePosition(RBNode x, int k) {
-		RBNode y = null;
-		while (x != null) {
-			y = x;
-			if (k == x.key)
-				return x;
-			else if (k < x.key)
-				x = left(x);
+	private RBNode treePosition(int k) {
+		RBNode node = root;
+		while (node != nil && k != node.key) {
+			if (k < node.key)
+				node = node.left;
 			else
-				x = right(x);
+				node = node.right;
 		}
-		return y;
+		return node;
 	}
-
-	private int insertFixup(RBNode z) // TODO check this method
-	{
+	
+	
+	private int insertFixup(RBNode z) {
 		int changes = 0;
-		while (z.parent != null && isRed(z.parent)) {
-			if (z.parent == left(z.parent.parent)) { // left side
-				RBNode uncle = right(z.parent.parent);
-				if (uncle != null && isRed(uncle)) // case 1
-				{
+		while (z.parent.isRed) {
+			if (z.parent == z.parent.parent.left) {
+				RBNode y = z.parent.parent.right;
+				if (y.isRed) { // case 1
 					z.parent.isRed = false;
-					uncle.isRed = false;
+					y.isRed = false;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3; // parent, uncle and grand-parent changed
-									// color
-
+					changes += 3;
 				} else {
-					if (z == right(z.parent)) // case 2
-					{
+					if (z == z.parent.right) { // case 2
 						z = z.parent;
 						leftRotate(z);
 					}
-					// case 3
-					z.parent.isRed = false;
+					z.parent.isRed = false; // case 3
 					z.parent.parent.isRed = true;
 					rightRotate(z.parent.parent);
-					changes += 2; // parent and grand-parent changed color
+					changes += 2;
 				}
-			} else { // right side
-				RBNode uncle = left(z.parent.parent);
-				if (uncle != null && isRed(uncle)) // case 1
-				{
+			}
+			if (z.parent == z.parent.parent.right) { // Symmetrical to other side
+				RBNode y = z.parent.parent.left;
+				if (y.isRed) { // case 1
 					z.parent.isRed = false;
-					uncle.isRed = false;
+					y.isRed = false;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3; // parent, uncle and grand-parent changed
-									// color
-
+					changes += 3;
 				} else {
-					if (z == left(z.parent)) // case 2
-					{
-
+					if (z == z.parent.left) { // case 2
 						z = z.parent;
-						leftRotate(z);
+						rightRotate(z);
 					}
-					// case 3
-					z.parent.isRed = false;
+					z.parent.isRed = false; // case 3
 					z.parent.parent.isRed = true;
-					rightRotate(z.parent.parent);
-					changes += 2; // parent and grand-parent changed color
+					leftRotate(z.parent.parent);
+					changes += 2;
 				}
 			}
 		}
-		getRoot();
-		this.root.isRed = false;
+		root.isRed = false;
 		return changes;
 	}
 
 	public String toString(RBNode n) {
 		String c;
-		if (n == null)
+		if (n == nil)
 			return "";
-		if (isRed(n))
+		if (n.isRed)
 			c = "R";
 		else
 			c = "B";
