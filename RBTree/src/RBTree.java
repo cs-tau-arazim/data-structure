@@ -293,7 +293,7 @@ public class RBTree {
 					right(w).isRed = false;
 					leftRotate(x.parent);
 					x = getRoot();
-					changes += 2;
+					changes += 3;
 				}
 
 			}
@@ -324,13 +324,14 @@ public class RBTree {
 					left(w).isRed = false;
 					rightRotate(x.parent);
 					x = getRoot();
-					changes += 2;
+					changes += 3;
 				}
 
 			}
 			
 		}
 		x.isRed = false;
+		changes += 1;
 		return changes;
 	}
 
