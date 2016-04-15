@@ -196,6 +196,7 @@ public class RBTree {
 
 		this.size += 1;
 
+		
 		return insertFixup(z);
 	}
 
@@ -296,7 +297,7 @@ public class RBTree {
 				}
 
 			}
-			if (x == right(x.parent)) {
+			else if (x == right(x.parent)) {
 				RBNode w = left(x.parent);
 				if (isRed(w)) { // case 1
 					w.isRed = false;
@@ -594,9 +595,11 @@ public class RBTree {
 	
 	
 	private int insertFixup(RBNode z) {
+		//System.out.println("insert fixup");
 		int changes = 0;
 
 		while (z.parent.isRed) {
+			//System.out.println("still red");
 			if (z.parent == z.parent.parent.left) {
 				RBNode y = z.parent.parent.right;
 				if (y.isRed) { // case 1
@@ -618,7 +621,7 @@ public class RBTree {
 				}
 
 			}
-			if (z.parent == z.parent.parent.right) { // Symmetrical to other side
+			else if (z.parent == z.parent.parent.right) { // Symmetrical to other side
 				RBNode y = z.parent.parent.left;
 				if (y.isRed) { // case 1
 
@@ -638,9 +641,11 @@ public class RBTree {
 					changes += 2;
 				}
 			}
+			
 		}
-
 		root.isRed = false;
+
+		
 
 		return changes;
 	}

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class ExTester {
 
-	public static final int SIZE = 200;//TODO
+	public static final int SIZE = 2048;//TODO
 
 	public static int[] sortInts(int[] arr) {
 		int[] sortedArr = new int[arr.length];
@@ -70,14 +70,14 @@ public class ExTester {
 
 	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
-			System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
+			//System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i))
 			{
-				System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
+				//System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 				return false;
 			}
 		}
-		
+		//System.out.println("yes");
 		return true;
 	}
 
@@ -140,15 +140,20 @@ public class ExTester {
 	}
 
 	public static boolean insertAndSearchTest() {
+		//System.out.println("insertAndSearch start");
 		RBTree rbTree = new RBTree();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
+		
 		for (int j = 0; j < keys.length; j++) {
+			//System.out.println(j);
 			rbTree.insert(keys[j],(""+keys[j]));
+			//System.out.println(j + "inserted key rb");
 			myTree.insert(keys[j]);
+			//System.out.println(j + "inserted key my");
 			if (!checkSearch(rbTree, myTree))
 			{
-				System.out.println(j);
+				
 				return false;
 			}
 			

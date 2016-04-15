@@ -69,6 +69,7 @@ class TestRun implements Runnable {
         		case 0: this.success = ExTester.emptyTreeTest();
         				break;
         		case 1: this.success = ExTester.insertAndSearchTest();
+        				//System.out.println("test");
         				break;
         		case 2: this.success = ExTester.deleteAndSearchTest();
         				break;
