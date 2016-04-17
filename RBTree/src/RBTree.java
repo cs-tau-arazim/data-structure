@@ -9,16 +9,9 @@
 
 public class RBTree {
 
-	/**
-	 * public class RBNode
-	 */
-
-
-	private final RBNode nil = new RBNode(Integer.MAX_VALUE, null, null);
-
-
 	private RBNode root;
 	private int size;
+	private final RBNode nil = new RBNode(Integer.MAX_VALUE, null, null);
 
 	/**
 	 * public RBTree()
@@ -32,9 +25,13 @@ public class RBTree {
 		this.nil.right = nil;
 		this.nil.left = nil;
 		nil.parent = nil;
-
 	}
-
+	
+	/**
+	 * public class RBNode
+	 * 
+	 * the internal nodes of the tree.
+	 */
 	public class RBNode {
 
 		// constructor for RBNode.
@@ -65,16 +62,21 @@ public class RBTree {
 		}
 
 		public RBNode getLeft() {
+			if (left == nil)
+				return null;
 			return left;
 		}
 
 		public RBNode getRight() {
+			if (right == nil)
+				return null;
 			return right;
 		}
 
 	}
 
-	// helper functions- similar to RBNode's isRed, right, left but helps sometimes.
+	// helper functions- similar to RBNode's isRed, right, left but helps in some parts of the code
+	// where we want to avoid calling 'nil' directly.
 	private boolean isRed(RBNode z)
 	{
 		if (z == nil)
@@ -84,7 +86,6 @@ public class RBTree {
 			return z.isRed;
 	}
 
-
 	private RBNode right(RBNode z)
 	{
 		if (z == nil)
@@ -92,7 +93,6 @@ public class RBTree {
 		else
 			return z.right;
 	}
-
 
 	private RBNode left(RBNode z)
 	{
@@ -151,6 +151,21 @@ public class RBTree {
 	}
 
 	/**
+	 * public int insert(int k, String v)
+	 *
+	 * inserts an item with key k and value v to the red black tree. the tree
+	 * must remain valid (keep its invariants). returns the number of color
+	 * switches, or 0 if no color switches were necessary. returns -1 if an item
+	 * with key k already exists in the tree.
+	 */
+	public int insert(int k, String v) {
+		RBNode z = new RBNode(k, v, this.nil);
+		if (k == treePosition(k).key)
+			return -1;
+		return insert(z);
+	}
+
+	/**
 	 * private int insert(RBNode z)
 	 *
 	 * inserts a node to the red black tree. the tree
@@ -187,21 +202,6 @@ public class RBTree {
 
 		
 		return insertFixup(z); // fix tree properties
-	}
-
-	/**
-	 * public int insert(int k, String v)
-	 *
-	 * inserts an item with key k and value v to the red black tree. the tree
-	 * must remain valid (keep its invariants). returns the number of color
-	 * switches, or 0 if no color switches were necessary. returns -1 if an item
-	 * with key k already exists in the tree.
-	 */
-	public int insert(int k, String v) {
-		RBNode z = new RBNode(k, v, this.nil);
-		if (k == treePosition(k).key)
-			return -1;
-		return insert(z);
 	}
 
 	/**
@@ -528,32 +528,6 @@ public class RBTree {
 	}
 
 	/**
-	 * private void leftChild(RBNode x, RBNode y)
-	 *
-	 * sets y to be the left child of x, x perent of y
-	 *
-	 * precondition: x,y != null (can be nil) postcondition: x.left = y
-	 */
-	private void leftChild(RBNode x, RBNode y) {
-		x.left = y;
-		if (y != nil)
-			y.parent = x;
-	}
-
-	/**
-	 * private void rightChild(RBNode x, RBNode y)
-	 *
-	 * sets y to be the right child of x, x perent of y
-	 *
-	 * precondition: x,y != null (can be nil) postcondition: x.right = y
-	 */
-	private void rightChild(RBNode x, RBNode y) {
-		x.right = y;
-		if (y != nil)
-			y.parent = x;
-	}
-
-	/**
 	 * private void transplant(RBNode x, RBNode y)
 	 *
 	 * replace the subtree of x by the subtree of y
@@ -577,12 +551,7 @@ public class RBTree {
 		y.parent = x.parent;
 	}
 
-	private void replace(RBNode x, RBNode y) {
-		transplant(x, y);
-		leftChild(y, left(x));
-		rightChild(y, right(x));
-	}
-
+	
 	private void leftRotate(RBNode x) {
 
 		RBNode y = x.right;
