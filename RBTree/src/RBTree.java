@@ -16,12 +16,11 @@ public class RBTree {
 
 	private final RBNode nil = new RBNode(Integer.MAX_VALUE, null, null);
 
-	//private final RBNode nil = new RBNode(0,null,null);
 
 	private RBNode root;
 	private int size;
 
-	/*
+	/**
 	 * public RBTree()
 	 * 
 	 * Builds an empty red-black tree.
@@ -75,7 +74,7 @@ public class RBTree {
 
 	}
 
-	// helper functions- similair to RBNode's isRed but helps sometimes.
+	// helper functions- similair to RBNode's isRed, right, left but helps sometimes.
 	private boolean isRed(RBNode z)
 	{
 		if (z == nil)
@@ -152,14 +151,14 @@ public class RBTree {
 	}
 
 	/**
-	 * public int insert(int k, String v)
+	 * private int insert(RBNode z)
 	 *
-	 * inserts an item with key k and value v to the red black tree. the tree
+	 * inserts a node to the red black tree. the tree
 	 * must remain valid (keep its invariants). returns the number of color
 	 * switches, or 0 if no color switches were necessary. returns -1 if an item
 	 * with key k already exists in the tree.
 	 */
-	public int insert(RBNode z) {
+	private int insert(RBNode z) {
 		RBNode y = nil;
 		RBNode x = root;
 		while (x != nil) { // find where to insert
@@ -190,6 +189,14 @@ public class RBTree {
 		return insertFixup(z); // fix tree properties
 	}
 
+	/**
+	 * public int insert(int k, String v)
+	 *
+	 * inserts an item with key k and value v to the red black tree. the tree
+	 * must remain valid (keep its invariants). returns the number of color
+	 * switches, or 0 if no color switches were necessary. returns -1 if an item
+	 * with key k already exists in the tree.
+	 */
 	public int insert(int k, String v) {
 		RBNode z = new RBNode(k, v, this.nil);
 		if (k == treePosition(k).key)
@@ -207,23 +214,23 @@ public class RBTree {
 	public int delete(int k) {
 		RBNode z = treePosition(k);
 		RBNode y = z;
-		RBNode x;
-		if (z == nil) {
+		RBNode x; // the node that could cause trouble later in fixup
+		if (z == nil) { // node doesn't exists in tree
 			return -1;
 
 		}
 		boolean yColor = y.isRed;
-		if (z.left == nil) {
+		if (z.left == nil) { // just "skip" z
 			x = z.right;
 			transplant(z, z.right);
 		}
-		else if (z.right == nil) {
+		else if (z.right == nil) { // "skip" z
 			x = z.left;
 			transplant(z, z.left);
 		}
-		else
+		else // z has 2 children, replace with succesor (which has only 1 child) and delete.
 		{
-			y =succesor(y);
+			y = succesor(y);
 			yColor = y.isRed;
 			x = y.right;
 			if (y.parent == z)
@@ -239,7 +246,7 @@ public class RBTree {
 			y.isRed = z.isRed;
 		}
 		size -= 1;
-		if (yColor == false)
+		if (yColor == false) // if the deleted node was black we need to fix
 			return deleteFixup(x);
 		return 0;
 	}
@@ -333,7 +340,7 @@ public class RBTree {
 			}
 			
 		}
-		if (x.isRed)
+		if (x.isRed) // check color change
 		{
 			x.isRed = false;
 			changes += 1;
@@ -469,6 +476,13 @@ public class RBTree {
 		return count; // will always be >= 0
 	}
 
+	/**
+	 * private RBNode succesor(RBNode node)
+	 *
+	 * Returns the succesor of node.
+	 *
+	 * precondition: node != null (can be nil) postcondition: succesor != null
+	 */
 	private RBNode succesor(RBNode node) {
 		RBNode next = node;
 
@@ -489,6 +503,13 @@ public class RBTree {
 		}
 	}
 
+	/**
+	 * private RBNode predeccesor(RBNode node)
+	 *
+	 * Returns the predeccesor of node.
+	 *
+	 * precondition: node != null (can be nil) postcondition: predeccesor != null
+	 */
 	private RBNode predeccesor(RBNode node) {
 		RBNode next = node;
 		if (left(next) != nil) { // case 1, node has left subtree
@@ -506,18 +527,39 @@ public class RBTree {
 		}
 	}
 
+	/**
+	 * private void leftChild(RBNode x, RBNode y)
+	 *
+	 * sets y to be the left child of x, x perent of y
+	 *
+	 * precondition: x,y != null (can be nil) postcondition: x.left = y
+	 */
 	private void leftChild(RBNode x, RBNode y) {
 		x.left = y;
 		if (y != nil)
 			y.parent = x;
 	}
 
+	/**
+	 * private void rightChild(RBNode x, RBNode y)
+	 *
+	 * sets y to be the right child of x, x perent of y
+	 *
+	 * precondition: x,y != null (can be nil) postcondition: x.right = y
+	 */
 	private void rightChild(RBNode x, RBNode y) {
 		x.right = y;
 		if (y != nil)
 			y.parent = x;
 	}
 
+	/**
+	 * private void transplant(RBNode x, RBNode y)
+	 *
+	 * replace the subtree of x by the subtree of y
+	 *
+	 * precondition: x,y != null (can be nil) postcondition: none
+	 */
 	private void transplant(RBNode x, RBNode y) {
 		if (x.parent == nil)
 		{
