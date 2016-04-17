@@ -74,7 +74,7 @@ public class RBTree {
 
 	}
 
-	// helper functions- similair to RBNode's isRed, right, left but helps sometimes.
+	// helper functions- similar to RBNode's isRed, right, left but helps sometimes.
 	private boolean isRed(RBNode z)
 	{
 		if (z == nil)
