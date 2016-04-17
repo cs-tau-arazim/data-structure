@@ -38,6 +38,7 @@ public class RBTree {
 
 	public class RBNode {
 
+		// constructor for RBNode.
 		public RBNode(int key, String value, RBNode parent) {
 			this.isRed = true;
 			this.key = key;
@@ -55,20 +56,13 @@ public class RBTree {
 		private RBNode left;
 		private RBNode right;
 
+		// getters for some of RBNode's fields.
 		public boolean isRed() {
 			return isRed;
 		}
 
 		public int getKey() {
 			return key;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public RBNode getParent() {
-			return parent;
 		}
 
 		public RBNode getLeft() {
@@ -79,16 +73,9 @@ public class RBTree {
 			return right;
 		}
 
-		/*
-		 * public void setRed(boolean isRed) { this.isRed = isRed; } public void
-		 * setKey(int key) { this.key = key; } public void setValue(int value) {
-		 * this.value = value; } public void setParent(RBNode parent) {
-		 * this.parent = parent; } public void setLeft(RBNode left) { this.left
-		 * = left; } public void setRight(RBNode right) { this.right = right; }
-		 */
-
 	}
 
+	// helper functions- similair to RBNode's isRed but helps sometimes.
 	private boolean isRed(RBNode z)
 	{
 		if (z == nil)
@@ -138,10 +125,10 @@ public class RBTree {
 	}
 
 	/**
-	 * public String search(int k)
+	 * public String treeSearch(RBNode node, int k)
 	 *
 	 * returns the value of an item with key k if it exists in the tree
-	 * otherwise, returns null
+	 * otherwise, returns null. same like search but starts with a given node.
 	 */
 	private String treeSearch(RBNode node, int k) {
 		while (node != nil && k != node.key) {
@@ -153,7 +140,13 @@ public class RBTree {
 		}
 		return node.value;
 	}
-
+	
+	/**
+	 * public String search(int k)
+	 *
+	 * returns the value of an item with key k if it exists in the tree
+	 * otherwise, returns null
+	 */
 	public String search(int k) {
 		return treeSearch(root, k);
 	}
@@ -169,7 +162,7 @@ public class RBTree {
 	public int insert(RBNode z) {
 		RBNode y = nil;
 		RBNode x = root;
-		while (x != nil) {
+		while (x != nil) { // find where to insert
 			y = x;
 			if (z.key < x.key)
 				x = x.left;
@@ -177,7 +170,7 @@ public class RBTree {
 				x = x.right;
 		}
 		z.parent = y;
-		if (y == nil)
+		if (y == nil) // check if insertion is at root
 		{
 			root = z;
 			nil.left = z;
@@ -191,10 +184,10 @@ public class RBTree {
 		z.right = nil;
 		z.isRed = true;
 
-		this.size += 1;
+		this.size += 1; // increment size
 
 		
-		return insertFixup(z);
+		return insertFixup(z); // fix tree properties
 	}
 
 	public int insert(int k, String v) {
