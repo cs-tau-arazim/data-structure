@@ -75,33 +75,6 @@ public class RBTree {
 
 	}
 
-	// helper functions- similar to RBNode's isRed, right, left but helps in some parts of the code
-	// where we want to avoid calling 'nil' directly.
-	private boolean isRed(RBNode z)
-	{
-		if (z == nil)
-
-			return false;
-		else
-			return z.isRed;
-	}
-
-	private RBNode right(RBNode z)
-	{
-		if (z == nil)
-			return nil;
-		else
-			return z.right;
-	}
-
-	private RBNode left(RBNode z)
-	{
-		if (z == nil)
-
-			return nil;
-		else
-			return z.left;
-	}
 
 	/**
 	 * public RBNode getRoot()
@@ -551,7 +524,11 @@ public class RBTree {
 		y.parent = x.parent;
 	}
 
-	
+	/**
+	 * private void leftRotate(RBNode x)
+	 *  
+	 * left-rotates x and its subtree, as seen in slides at the lectures.
+	 */
 	private void leftRotate(RBNode x) {
 
 		RBNode y = x.right;
@@ -572,6 +549,11 @@ public class RBTree {
 		x.parent = y;
 	}
 
+	/**
+	 * private void rightRotate(RBNode x)
+	 *  
+	 * right-rotates x and its subtree, as seen in slides at the lectures.
+	 */
 	private void rightRotate(RBNode x) {
 		RBNode y = x.left;
 		x.left = y.right;
@@ -592,8 +574,12 @@ public class RBTree {
 
 	}
 
-
-
+	/**
+	 * RBNode treePosition(int k)
+	 * 
+	 * the method receives an integer key k, and returns the node to which the key belongs to.
+	 * if there is no such node, the method returns this.nil.
+	 */
 	private RBNode treePosition(int k) {
 		RBNode node = root;
 		while (node != nil && k != node.key) {
@@ -606,7 +592,12 @@ public class RBTree {
 		return node;
 	}
 	
-	
+	/**
+	 * insertFixup(RBNode z) 
+	 * 
+	 * the function receives a node that was just inserted into the tree,
+	 * and makes sure the tree's Red-Black properties remain legal.
+	 */
 	private int insertFixup(RBNode z) {
 		//System.out.println("insert fixup");
 		int changes = 0;
@@ -675,9 +666,51 @@ public class RBTree {
 		return changes;
 	}
 
+	/** helper functions- similar to RBNode's isRed, right, left but helps in some parts of the code
+	* where we want to avoid calling 'nil' directly.
+	 * 
+	 */
+	private boolean isRed(RBNode z)
+	{
+		if (z == nil)
+
+			return false;
+		else
+			return z.isRed;
+	}
+
+	private RBNode right(RBNode z)
+	{
+		if (z == nil)
+			return nil;
+		else
+			return z.right;
+	}
+
+	private RBNode left(RBNode z)
+	{
+		if (z == nil)
+
+			return nil;
+		else
+			return z.left;
+	}
+
+	
+	/**
+	 * public String toString()
+	 * 
+	 * returns the tree as a string.
+	 */
 	public String toString() {
 		return toString(root);
 	}
+	
+	/**
+	 * private String toString(RBNode n)
+	 * 
+	 * returns the subtree starting with node n as a string.
+	 */
 	private String toString(RBNode n) {
 		String c;
 		if (n == nil)
