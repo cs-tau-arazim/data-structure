@@ -671,7 +671,10 @@ public class RBTree {
 		return changes;
 	}
 
-	public String toString(RBNode n) {
+	public String toString() {
+		return toString(root);
+	}
+	private String toString(RBNode n) {
 		String c;
 		if (n == nil)
 			return "";
