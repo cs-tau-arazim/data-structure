@@ -24,7 +24,7 @@ public class RBTree {
 	/*
 	 * public RBTree()
 	 * 
-	 * אBuilds an empty red-black tree.
+	 * Builds an empty red-black tree.
 	 */
 	public RBTree() {
 		this.size = 0;
@@ -143,7 +143,6 @@ public class RBTree {
 	 * returns the value of an item with key k if it exists in the tree
 	 * otherwise, returns null
 	 */
-
 	private String treeSearch(RBNode node, int k) {
 		while (node != nil && k != node.key) {
 			if (k < node.key)
@@ -167,8 +166,6 @@ public class RBTree {
 	 * switches, or 0 if no color switches were necessary. returns -1 if an item
 	 * with key k already exists in the tree.
 	 */
-
-
 	public int insert(RBNode z) {
 		RBNode y = nil;
 		RBNode x = root;
@@ -270,10 +267,12 @@ public class RBTree {
 				RBNode w = right(x.parent);
 				if (isRed(w)) { // case 1
 					w.isRed = false;
+					if (!x.parent.isRed) // check color change
+						changes += 1;
 					x.parent.isRed = true;
 					leftRotate(x.parent);
 					w = right(x.parent);
-					changes += 2;
+					changes += 1;
 				}
 				if (!isRed(left(w)) && !isRed(right(w))) { // case 2
 					w.isRed = true;
@@ -281,19 +280,23 @@ public class RBTree {
 					changes += 1;
 				} else {
 					if (!isRed(right(w))) { // case 3
-
 						left(w).isRed = false;
 						w.isRed = true;
 						rightRotate(w);
 						w = x.parent.right;
 						changes += 2;
 					} // case 4
+					if (w.isRed != isRed(x.parent)) // check color change
+						changes += 1;
 					w.isRed = isRed(x.parent);
+					if (x.parent.isRed) // check color change
+						changes += 1;
 					x.parent.isRed = false;
+					if (right(w).isRed) // check color change
+						changes += 1;
 					right(w).isRed = false;
 					leftRotate(x.parent);
 					x = getRoot();
-					changes += 3;
 				}
 
 			}
@@ -301,10 +304,12 @@ public class RBTree {
 				RBNode w = left(x.parent);
 				if (isRed(w)) { // case 1
 					w.isRed = false;
+					if (!x.parent.isRed) // check color change
+						changes += 1;
 					x.parent.isRed = true;
 					rightRotate(x.parent);
 					w = left(x.parent);
-					changes += 2;
+					changes += 1;
 				}
 				if (!isRed(right(w)) && !isRed(left(w))) { // case 2
 					w.isRed = true;
@@ -319,19 +324,27 @@ public class RBTree {
 						w = x.parent.left;
 						changes += 2;
 					} // case 4
+					if (w.isRed != isRed(x.parent)) // check color change
+						changes += 1;
 					w.isRed = isRed(x.parent);
+					if (x.parent.isRed) // check color change
+						changes += 1;
 					x.parent.isRed = false;
+					if (left(w).isRed) // check color change
+						changes += 1;
 					left(w).isRed = false;
 					rightRotate(x.parent);
 					x = getRoot();
-					changes += 3;
 				}
 
 			}
 			
 		}
-		x.isRed = false;
-		changes += 1;
+		if (x.isRed)
+		{
+			x.isRed = false;
+			changes += 1;
+		}
 		return changes;
 	}
 
@@ -607,18 +620,22 @@ public class RBTree {
 
 					z.parent.isRed = false;
 					y.isRed = false;
+					if (!z.parent.parent.isRed) // check color change
+						changes += 1;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3;
+					changes += 2;
 				} else {
 					if (z == z.parent.right) { // case 2
 						z = z.parent;
 						leftRotate(z);
 					}
 					z.parent.isRed = false; // case 3
+					if (!z.parent.parent.isRed) // check color change
+						changes += 1;
 					z.parent.parent.isRed = true;
 					rightRotate(z.parent.parent);
-					changes += 2;
+					changes += 1;
 				}
 
 			}
@@ -628,24 +645,32 @@ public class RBTree {
 
 					z.parent.isRed = false;
 					y.isRed = false;
+					if (!z.parent.parent.isRed) // check color change
+						changes += 1;
 					z.parent.parent.isRed = true;
 					z = z.parent.parent;
-					changes += 3;
+					changes += 2;
 				} else {
 					if (z == z.parent.left) { // case 2
 						z = z.parent;
 						rightRotate(z);
 					}
 					z.parent.isRed = false; // case 3
+					if (!z.parent.parent.isRed) // check color change
+						changes += 1;
 					z.parent.parent.isRed = true;
 					leftRotate(z.parent.parent);
-					changes += 2;
+					changes += 1;
 				}
 			}
 			
 		}
-		root.isRed = false;
-		changes += 1;
+		
+		if (root.isRed)
+		{
+			root.isRed = false;
+			changes += 1;
+		}
 		
 
 		return changes;
