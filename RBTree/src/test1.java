@@ -1,8 +1,12 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class test1 {
 	public static void main(String [] args) {
 		RBTree t = new RBTree();
-
+		testRank();
+		/*
 		for (int i =0; i<10; i++) {
 			t.insert(i, ""+i);
 			System.out.println(t.toString(t.getRoot()));
@@ -29,7 +33,29 @@ public class test1 {
 
 		for(String i: arr2){
 			System.out.print(i +" ");
+			
 		}
-
+	*/
+	}
+	
+	public static void testRank() {
+		RBTree rb = new RBTree();
+		
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < 10; i++) {
+			list.add(i, i*2);
+		}
+		
+		Collections.shuffle(list);
+		for (int i = 0; i < 10; i++) {
+			rb.insert(list.get(i), ""+list.get(i));
+		}
+		System.out.println(rb.toString(rb.getRoot()));
+		
+		
+		for (int i = 0; i < 11; i++) {
+			System.out.println(rb.rank(i));
+		}
+		
 	}
 }

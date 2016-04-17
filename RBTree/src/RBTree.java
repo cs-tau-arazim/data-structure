@@ -453,30 +453,25 @@ public class RBTree {
 			return 0;
 
 		RBNode node = getRoot();
-		RBNode parent = getRoot(); // save the parent for later use
+		RBNode parent = root; // save the parent for later use
 		while (node != nil) {
-			if (node.key == k) {
-				parent = node;
-				break;
-			} else if (node.key > k) {
-				parent = node;
-				node = left(node);
-			} else {
-				parent = node;
-				node = right(node);
-			}
+			parent = node;
+			if (k < node.key)
+				node = node.left;
+			else
+				node = node.right;
 		}
-		int count = -1;
-		if (node != nil) {
-			node = parent; // saved parent so we can go back if k isn't in the
-							// tree
-			if (node.key < k)
-				count += 1;
-		}
+		
+		int count = 0;
+		if (parent.key < k)
+			count += 1;
+		
 
-		while (node != nil) { // start counting number of predecessors
-			node = predeccesor(node);
-			count++;
+		
+		while (parent != nil) { // start counting number of predecessors
+			parent = predeccesor(parent);
+			if (parent.key < k)
+				count++;
 		}
 		return count; // will always be >= 0
 	}
