@@ -6,7 +6,10 @@
  */
 public class BinomialHeap
 {
-
+	private HeapNode head;
+	private HeapNode min;
+	private int n;
+	
    /**
     * public boolean empty()
     *
@@ -18,7 +21,9 @@ public class BinomialHeap
     */
     public boolean empty()
     {
-    	return false; // should be replaced by student code
+    	if (head == null)
+    		return true;
+    	return false;
     }
 		
    /**
@@ -155,7 +160,15 @@ public class BinomialHeap
     *  
     */
     public class HeapNode{
-  	
+    	private int key;
+    	// TODO should there by value field?
+    	private HeapNode next;
+    	private HeapNode parent;
+    	
+		public HeapNode(int key, HeapNode next, HeapNode parent) {
+			this.key = key;
+			this.next = next;
+			this.parent = parent;
+		}
     }
-
 }
