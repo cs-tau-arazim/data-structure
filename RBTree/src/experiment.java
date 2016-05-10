@@ -15,7 +15,7 @@ public class experiment {
 	}
 
 	public static void exp(int j) {
-		RBTree rb = new RBTree();
+		RBTree_galwiernik_tomsegal rb = new RBTree_galwiernik_tomsegal();
 		int insChanges = 0;
 		int delChanges = 0;
 		List<Integer> list = new ArrayList<Integer>();

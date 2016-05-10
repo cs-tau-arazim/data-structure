@@ -4,7 +4,7 @@ import java.util.List;
 
 public class test1 {
 	public static void main(String [] args) {
-		RBTree t = new RBTree();
+		RBTree_galwiernik_tomsegal t = new RBTree_galwiernik_tomsegal();
 		testRank();
 		/*
 		for (int i =0; i<10; i++) {
@@ -39,21 +39,21 @@ public class test1 {
 	}
 	
 	public static void testRank() {
-		RBTree rb = new RBTree();
+		RBTree_galwiernik_tomsegal rb = new RBTree_galwiernik_tomsegal();
 		
 		List<Integer> list = new ArrayList<Integer>();
-		for (int i = 0; i < 1000; i++) {
-			list.add(i, i);
+		for (int i = 0; i < 10; i++) {
+			list.add(i*2);
 		}
 		
 		Collections.shuffle(list);
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			rb.insert(list.get(i), ""+list.get(i));
 		}
 		System.out.println(rb.toString());
 		
 		
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			System.out.println(rb.rank(i));
 		}
 		

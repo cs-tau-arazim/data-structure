@@ -5,9 +5,17 @@
  * An implementation of a Red Black Tree with non-negative, distinct integer
  * keys and values
  *
+ * creators:
+ * Tom Segal-
+ * username: tomsegal
+ * Id: 208945519
+ * 
+ * Gal Wiernik-
+ * username: galwiernik
+ * Id: 208884213
  */
 
-public class RBTree {
+public class RBTree_galwiernik_tomsegal {
 
 	private RBNode root;
 	private int size;
@@ -18,7 +26,7 @@ public class RBTree {
 	 * 
 	 * Builds an empty red-black tree.
 	 */
-	public RBTree() {
+	public RBTree_galwiernik_tomsegal() {
 		this.size = 0;
 		this.root = nil;
 		this.nil.isRed = false;

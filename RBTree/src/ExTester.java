@@ -42,33 +42,33 @@ public class ExTester {
 			return Integer.parseInt(str);
 	}
 
-	public static boolean checkEmpty(RBTree rbTree, MyTree myTree) {
+	public static boolean checkEmpty(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return rbTree.empty() == myTree.empty();
 	}
 
-	public static boolean checkSize(RBTree rbTree, MyTree myTree) {
+	public static boolean checkSize(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return rbTree.size() == myTree.size();
 	}
 
-	public static boolean checkMin(RBTree rbTree, MyTree myTree) {
+	public static boolean checkMin(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return intValue(rbTree.min()) == myTree.min();
 	}
 
-	public static boolean checkMax(RBTree rbTree, MyTree myTree) {
+	public static boolean checkMax(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return intValue(rbTree.max()) == myTree.max();
 	}
 
-	public static boolean checkKeysArray(RBTree rbTree, MyTree myTree) {
+	public static boolean checkKeysArray(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return arraysIdentical(rbTree.keysToArray(),
 							   sortInts(myTree.array()));
 	}
 
-	public static boolean checkValuesArray(RBTree rbTree, MyTree myTree) {
+	public static boolean checkValuesArray(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return arraysIdentical(stringToInt(rbTree.valuesToArray()),
 							   sortInts(myTree.array()));
 	}
 
-	public static boolean checkSearch(RBTree rbTree, MyTree myTree) {
+	public static boolean checkSearch(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		for (int i = 0; i < SIZE; i++) {
 			//System.out.println(intValue(rbTree.search(i)) + ", " + i + ", " + myTree.contains(i));
 			if ((intValue(rbTree.search(i)) == i) != myTree.contains(i))
@@ -81,7 +81,7 @@ public class ExTester {
 		return true;
 	}
 
-	public static boolean checkAll(RBTree rbTree, MyTree myTree) {
+	public static boolean checkAll(RBTree_galwiernik_tomsegal rbTree, MyTree myTree) {
 		return (checkEmpty(rbTree, myTree) &&
 				checkSize(rbTree, myTree) &&
 				checkMin(rbTree, myTree) &&
@@ -90,7 +90,7 @@ public class ExTester {
 				checkValuesArray(rbTree, myTree));
 	}
 
-	public static void insert(RBTree rbTree, MyTree myTree, int[] keys) {
+	public static void insert(RBTree_galwiernik_tomsegal rbTree, MyTree myTree, int[] keys) {
 		for (int j = 0; j < keys.length; j++) {
 			rbTree.insert(keys[j],(""+keys[j]));
 			myTree.insert(keys[j]);
@@ -127,7 +127,7 @@ public class ExTester {
 	}
 
 	public static boolean emptyTreeTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 
 		if (!checkAll(rbTree, myTree))
@@ -141,7 +141,7 @@ public class ExTester {
 
 	public static boolean insertAndSearchTest() {
 		//System.out.println("insertAndSearch start");
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		
@@ -163,7 +163,7 @@ public class ExTester {
 	}
 
 	public static boolean deleteAndSearchTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -177,7 +177,7 @@ public class ExTester {
 	}
 
 	public static boolean insertAndMinMaxTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -190,7 +190,7 @@ public class ExTester {
 	}
 
 	public static boolean deleteMinMaxTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -204,7 +204,7 @@ public class ExTester {
 	}
 
 	public static boolean insertAndSizeEmptyTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -217,7 +217,7 @@ public class ExTester {
 	}
 
 	public static boolean insertAndArraysTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
@@ -232,7 +232,7 @@ public class ExTester {
 	}
 
 	public static boolean deleteAndArraysTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -248,7 +248,7 @@ public class ExTester {
 	}
 
 	public static boolean doubleInsertTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		insert(rbTree, myTree, keys);
@@ -262,7 +262,7 @@ public class ExTester {
 	}
 
 	public static boolean doubleDeleteTest() {
-		RBTree rbTree = new RBTree();
+		RBTree_galwiernik_tomsegal rbTree = new RBTree_galwiernik_tomsegal();
 		MyTree myTree = new MyTree();
 		int[] keys = generateKeys();
 		for (int j = 0; j < keys.length; j++) {
