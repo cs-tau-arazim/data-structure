@@ -22,18 +22,24 @@ public class experiment {
 		for (int i = 1; i < 10*j*num; i++) {
 			list.add(new Integer(i));
 		}
+		
 		Collections.shuffle(list);
 		for (int i = 0; i < j*num; i++) {
 			insChanges += rb.insert(list.get(i), ""+list.get(i));
 		}
 		list = (list.subList(0, j*num));
+		
 		Collections.sort(list);
+		for (int i = 0; i < j*num; i++) {
+			//System.out.println(list.get(i));
+		}
 		
 		
 		
 		for (int i = 0; i < j*num; i++) {
 			delChanges += rb.delete(list.get(i));
 		}
+		//System.out.println(rb.toString());
 		
 		System.out.println(j + "\t" + j*num + "\t\t" + Math.round((double)insChanges/(j*num)*10000)/(double)10000 + "\t\t" + Math.round((double)delChanges/(j*num)*10000)/(double)10000);
 	}

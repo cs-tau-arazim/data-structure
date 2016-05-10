@@ -9,58 +9,15 @@ import java.util.LinkedList;
 public class BinomialHeap {
 	private HeapNode head;
 	private HeapNode min;
-	private int n;
+	private int size;
 
 	public BinomialHeap() {
 		this.head = null;
 		this.min = null;
-		this.n = 0;
+		this.size = 0;
 	}
 
-	/**
-	 * public boolean empty()
-	 *
-	 * precondition: none
-	 * 
-	 * The method returns true if and only if the heap is empty.
-	 * 
-	 */
-	public boolean empty() {
-		if (head == null)
-			return true;
-		return false;
-	}
 
-	/**
-	 * public void insert(int value)
-	 *
-	 * Insert value into the heap
-	 *
-	 */
-	public void insert(int value) {
-		return; // should be replaced by student code
-	}
-
-	/**
-	 * public void deleteMin()
-	 *
-	 * Delete the minimum value
-	 *
-	 */
-	public void deleteMin() {
-		return; // should be replaced by student code
-
-	}
-
-	/**
-	 * public int findMin()
-	 *
-	 * Return the minimum value
-	 *
-	 */
-	public int findMin() {
-		return 42;// should be replaced by student code
-	}
 
 	private HeapNode binomialHeapMerge(BinomialHeap h) {
 		HeapNode newHead = new HeapNode();
@@ -100,25 +57,7 @@ public class BinomialHeap {
 		return newHead;
 	}
 
-	/**
-	 * public void meld (BinomialHeap heap2)
-	 *
-	 * Meld the heap with heap2
-	 *
-	 */
-	public void meld(BinomialHeap heap2) {
-		return; // should be replaced by student code
-	}
-
-	/**
-	 * public int size()
-	 *
-	 * Return the number of elements in the heap
-	 * 
-	 */
-	public int size() {
-		return 42; // should be replaced by student code
-	}
+	
 
 	/**
 	 * public int minTreeRank()
@@ -198,16 +137,6 @@ public class BinomialHeap {
 		return; // should be replaced by student code
 	}
 
-	/**
-	 * public void decreaseKey(int oldValue, int newValue)
-	 *
-	 * If the heap doen't contain an element with value oldValue, don't change
-	 * the heap. Otherwise decrease the value of the element whose value is
-	 * oldValue to be newValue. Assume newValue <= oldValue.
-	 */
-	public void decreaseKey(int oldValue, int newValue) {
-		return; // should be replaced by student code
-	}
 
 	/**
 	 * public class HeapNode
@@ -216,21 +145,195 @@ public class BinomialHeap {
 	 * HeapNode), do it in this file, not in another file
 	 * 
 	 */
-	public class HeapNode {
-		private int degree;
-		private int key;
-		// TODO should there by value field?
-		private HeapNode next;
-		private HeapNode parent;
+	
+	
+   /**
+    * public boolean empty()
+    *
+    * precondition: none
+    * 
+    * The method returns true if and only if the heap
+    * is empty.
+    *   
+    */
+    public boolean empty()
+    {
+    	return this.head != null;
+    }
+		
+   /**
+    * public void insert(int value)
+    *
+    * Insert value into the heap 
+    *
+    */
+    public void insert(int value) 
+    {    
+    	HeapNode x = new HeapNode(value);
+    	BinomialHeap h = new BinomialHeap();
+    	h.head = x;
+    	meld(h);
+    	if (x.key < this.min.key)
+    		this.min = x;
+    	this.size += 1;
+    }
 
-		public HeapNode(int key, HeapNode next, HeapNode parent) {
+   /**
+    * public void deleteMin()
+    *
+    * Delete the minimum value
+    *
+    */
+    public void deleteMin()
+    {
+    	HeapNode x = this.min;
+    	if (x == this.head)
+    		this.head = x.next;
+    	else
+    	{
+	    	HeapNode prevX = this.head;
+	    	while (prevX.next != x)
+	    		prevX = prevX.next;
+	    	prevX.next = x.next;
+    	}
+    	BinomialHeap h = new BinomialHeap();
+    	HeapNode prev = null;
+    	HeapNode current = x.child;
+    	HeapNode next = current.next;
+    	while(next != null)
+    	{
+    		current.next = prev;
+    		prev = current;
+    		current = next;
+    		next = next.next;
+    	}
+    	current.next = prev;
+    	h.head = current;
+    	meld(h);
+    	this.size -= 1;
+    }
+
+   /**
+    * public int findMin()
+    *
+    * Return the minimum value
+    *
+    */
+    public int findMin()
+    {
+    	return this.min.key;
+    } 
+    
+   /**
+    * public void meld (BinomialHeap heap2)
+    *
+    * Meld the heap with heap2
+    *
+    */
+    public void meld (BinomialHeap heap2)
+    {
+    	if (heap2.min.key < this.min.key)
+    		this.min = heap2.min;
+    	this.head = binomialHeapMerge(heap2);
+    	if (this.head == null)
+    		return;
+    	HeapNode prevX = null;
+    	HeapNode x = this.head;
+    	HeapNode nextX = x.next;
+    	while (nextX != null)
+    	{
+    		if (x.degree != nextX.degree || (nextX.next != null && nextX.next.degree == x.degree))
+    		{
+    			prevX = x;
+    			x = nextX;
+    		}
+    		else if (x.key <= nextX.key)
+    		{
+    			x.next = nextX.next;
+    			binominalLink(x, nextX);
+    		}
+    		else 
+    		{
+    			if (prevX == null)
+	    		{
+	    			this.head = nextX;
+	    		}
+	    		else
+	    		{
+	    			prevX.next = nextX;
+	    		}
+    			binominalLink(x, nextX);
+    			x = nextX;
+    		}
+    	}
+    }
+    
+
+   /**
+    * public int size()
+    *
+    * Return the number of elements in the heap
+    *   
+    */
+    public int size()
+    {
+    	return this.size; // should be replaced by student code
+    }
+    
+
+   /**
+    * public void decreaseKey(int oldValue, int newValue)
+    *
+    * If the heap doen't contain an element with value oldValue, don't change the heap.
+    * Otherwise decrease the value of the element whose value is oldValue to be newValue. 
+    * Assume newValue <= oldValue.
+    */
+    public void decreaseKey(int oldValue, int newValue) 
+    {    
+    	//TODO HASH FUNC 
+    	HeapNode x = HASHFUNC(oldValue);
+    	
+    }
+    
+   /**
+    * public class HeapNode
+    * 
+    * If you wish to implement classes other than BinomialHeap
+    * (for example HeapNode), do it in this file, not in 
+    * another file 
+    *  
+    */
+    public class HeapNode{
+    	private int key;
+    	// TODO should there by value field?
+    	private HeapNode next;
+    	private HeapNode parent;
+    	private HeapNode child;
+    	private int degree;
+    	
+		public HeapNode(int key) {
+			this.parent = null;
+	    	this.next = null;
+	    	this.child = null;
 			this.key = key;
-			this.next = next;
-			this.parent = parent;
+			degree = 0;
 		}
+
 
 		public HeapNode() {
 			// TODO Auto-generated constructor stub
 		}
 	}
+
+    
+    private void binominalLink(HeapNode y, HeapNode z)
+    {
+    	y.parent = z;
+    	y.next = z.child;
+    	z.child = y;
+    	z.degree += 1;
+    }
+    
+    
+
 }
