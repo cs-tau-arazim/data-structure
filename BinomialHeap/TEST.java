@@ -4,7 +4,7 @@ import java.util.Random;
 public class TEST {
 	public static void main(String[]args) {
 
-		
+		/*
         int[] vals = createValues(100);
         BinomialHeap heap1 = new BinomialHeap();
     	//System.out.println(heap1);
@@ -51,7 +51,9 @@ public class TEST {
         	System.out.println("yey 2");
         }
             
-        
+        */
+		
+		test2.
 	}
 
     private static int[] createValues(int n) {
