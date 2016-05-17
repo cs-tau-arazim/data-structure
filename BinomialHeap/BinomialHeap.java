@@ -429,6 +429,14 @@ public class BinomialHeap {
     	z.degree += 1;
     }
     
+    public String toString()
+    {
+    	String str = "head key: " + this.head.key + "\n";
+    	str += "min key: " + this.min.key + "\n";
+    	str += "size: " + this.size + "\n";
+    	str += map.toString();
+    	return str;
+    }
     
 
 }
