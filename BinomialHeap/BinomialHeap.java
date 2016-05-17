@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
  * BinomialHeap
@@ -7,6 +8,7 @@ import java.util.LinkedList;
  * exercise from previous semester.
  */
 public class BinomialHeap {
+	private HashMap<Integer, HeapNode> map;
 	private HeapNode head;
 	private HeapNode min;
 	private int size;
@@ -15,6 +17,7 @@ public class BinomialHeap {
 		this.head = null;
 		this.min = null;
 		this.size = 0;
+		map = new HashMap<Integer, HeapNode>();
 	}
 
 
@@ -138,13 +141,7 @@ public class BinomialHeap {
 	}
 
 
-	/**
-	 * public class HeapNode
-	 * 
-	 * If you wish to implement classes other than BinomialHeap (for example
-	 * HeapNode), do it in this file, not in another file
-	 * 
-	 */
+	
 	
 	
    /**
@@ -172,10 +169,10 @@ public class BinomialHeap {
     	HeapNode x = new HeapNode(value);
     	BinomialHeap h = new BinomialHeap();
     	h.head = x;
+    	h.min = x;
+    	h.size = 1;
+    	h.map.put(value, x);
     	meld(h);
-    	if (x.key < this.min.key)
-    		this.min = x;
-    	this.size += 1;
     }
 
    /**
@@ -186,6 +183,7 @@ public class BinomialHeap {
     */
     public void deleteMin()
     {
+    	this.map.remove(this.min.key);
     	HeapNode x = this.min;
     	if (x == this.head)
     		this.head = x.next;
@@ -195,6 +193,14 @@ public class BinomialHeap {
 	    	while (prevX.next != x)
 	    		prevX = prevX.next;
 	    	prevX.next = x.next;
+    	}
+    	HeapNode newMin = this.head;
+    	this.min = newMin;
+    	while (newMin.next != null)
+    	{
+    		newMin = newMin.next;
+    		if (newMin.key < this.min.key)
+    			this.min = newMin;
     	}
     	BinomialHeap h = new BinomialHeap();
     	HeapNode prev = null;
@@ -232,9 +238,13 @@ public class BinomialHeap {
     */
     public void meld (BinomialHeap heap2)
     {
+    	this.map.putAll(heap2.map);
+    	this.size += heap2.size;
     	if (heap2.min.key < this.min.key)
     		this.min = heap2.min;
     	this.head = binomialHeapMerge(heap2);
+    	
+    	
     	if (this.head == null)
     		return;
     	HeapNode prevX = null;
@@ -289,10 +299,23 @@ public class BinomialHeap {
     * Assume newValue <= oldValue.
     */
     public void decreaseKey(int oldValue, int newValue) 
-    {    
-    	//TODO HASH FUNC 
-    	HeapNode x = HASHFUNC(oldValue);
-    	
+    {     
+    	HeapNode x = map.get(oldValue);
+    	if (x == null)
+    		return;
+    	x.key = newValue;
+    	if (newValue < this.min.key)
+	    	this.min = x;
+    	HeapNode y = x;
+    	HeapNode z = y.parent;
+    	while (z != null && y.key < z.key)
+    	{
+    		int temp = y.key;
+    		y.key = z.key;
+    		z.key = temp;
+    		y = z;
+    		z = y.parent;
+    	}
     }
     
    /**
