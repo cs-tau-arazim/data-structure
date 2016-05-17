@@ -132,6 +132,9 @@ public class BinomialHeap {
 	 * 
 	 */
 	public boolean isValid() {
+		if(this.empty())
+			return true;
+		
 		HeapNode node = this.head;
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		int children;
@@ -139,18 +142,27 @@ public class BinomialHeap {
 		
 		while(node != null) {
 			children = numOfChildren(node);
-			if (!isValidTree(node, children))
+			if (!isValidTree(node, children)) {
+            	System.out.println("Invalid tree structure");
+
 				return false;
+			}
+
 			if (list.contains(children)) { // check if there are two trees of same size
+            	System.out.println("REPEATING tree structure");
+
 				return false;
 			}
 			list.add(children);
 			if (node.key < minKey)
 				minKey = node.key;
+			node = node.next;
 		}
-		if (minKey != min.key)
+		if (minKey != min.key) {
+        	System.out.println("Invalid MINIMUM structure");
+
 			return false; // check if the minimum really is the minimum key
-		
+		}
 		// calculate number of nodes.
 		// if the code made it this far, then all trees are legal
 		// and each k-degree tree has exactly 2^k nodes.
@@ -226,7 +238,7 @@ public class BinomialHeap {
     */
     public boolean empty()
     {
-    	return this.head != null;
+    	return this.head == null;
     }
 		
    /**
@@ -254,6 +266,9 @@ public class BinomialHeap {
     */
     public void deleteMin()
     {
+    	if (this.empty())
+    		return;
+    	
     	this.map.remove(this.min.key);
     	HeapNode x = this.min;
     	if (x == this.head)
@@ -309,6 +324,19 @@ public class BinomialHeap {
     */
     public void meld (BinomialHeap heap2)
     {
+    	// special cases
+    	if (this.empty()) {
+    		this.head = heap2.head;
+    		this.map = heap2.map;
+    		this.min = heap2.min;
+    		this.size = heap2.size;
+    		return;
+    	}
+    	
+    	if (heap2.empty()) {
+    		return;
+    	}
+    	
     	this.map.putAll(heap2.map);
     	this.size += heap2.size;
     	if (heap2.min.key < this.min.key)
@@ -400,7 +428,6 @@ public class BinomialHeap {
     
     public class HeapNode{
     	private int key;
-    	// TODO should there by value field?
     	private HeapNode next;
     	private HeapNode parent;
     	private HeapNode child;
@@ -415,8 +442,12 @@ public class BinomialHeap {
 		}
 
 
+		// empty constructor
 		public HeapNode() {
-			// TODO Auto-generated constructor stub
+		}
+		
+		public String toString() {
+			return "(key:" + this.key + ", degree: " +this.degree+")";
 		}
 	}
 
@@ -431,6 +462,8 @@ public class BinomialHeap {
     
     public String toString()
     {
+		if (empty())
+			return "empty";
     	String str = "head key: " + this.head.key + "\n";
     	str += "min key: " + this.min.key + "\n";
     	str += "size: " + this.size + "\n";
