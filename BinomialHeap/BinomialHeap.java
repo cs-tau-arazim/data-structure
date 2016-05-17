@@ -14,7 +14,9 @@ public class BinomialHeap {
 	private int size;
 
 	/**
-	 * public BinomialHeap() { an empty constructor for BinomialHeap.
+	 * public BinomialHeap()
+	 * 
+	 * an empty constructor for BinomialHeap.
 	 */
 	public BinomialHeap() {
 		this.head = null;
