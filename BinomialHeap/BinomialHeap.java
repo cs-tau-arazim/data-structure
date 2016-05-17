@@ -69,7 +69,7 @@ public class BinomialHeap {
 	 * 
 	 */
 	public int minTreeRank() {
-		return 0; // to be replaced by student code
+		return this.head.degree;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class BinomialHeap {
 			}
 		}
 
-		return arr; // to be replaced by student code
+		return arr;
 	}
 
 	/**
@@ -115,7 +115,14 @@ public class BinomialHeap {
 	 * 
 	 */
 	public void arrayToHeap(int[] array) {
-		return; // to be replaced by student code
+		BinomialHeap newHeap = new BinomialHeap();
+		for (int i = 0; i < array.length; i++) {
+			newHeap.insert(array[i]);
+		}
+		this.head = newHeap.head;
+		this.min = newHeap.min;
+		this.size = newHeap.size;
+		this.map = newHeap.map;
 	}
 
 	/**
@@ -125,9 +132,16 @@ public class BinomialHeap {
 	 * 
 	 */
 	public boolean isValid() {
+		
+		
+		
 		return false; // should be replaced by student code
 	}
 
+	private int numOfChildren() {
+		
+	}
+	
 	/**
 	 * public void delete(int value)
 	 *
@@ -137,13 +151,11 @@ public class BinomialHeap {
 	 *
 	 */
 	public void delete(int value) {
-		return; // should be replaced by student code
+		this.decreaseKey(value, Integer.MIN_VALUE);
+		this.deleteMin();
 	}
 
 
-	
-	
-	
    /**
     * public boolean empty()
     *
@@ -326,6 +338,7 @@ public class BinomialHeap {
     * another file 
     *  
     */
+    
     public class HeapNode{
     	private int key;
     	// TODO should there by value field?
