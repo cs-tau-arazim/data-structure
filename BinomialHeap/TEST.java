@@ -5,33 +5,51 @@ public class TEST {
 	public static void main(String[]args) {
 
 		
-        int[] vals = createValues(5);
+        int[] vals = createValues(100);
         BinomialHeap heap1 = new BinomialHeap();
-    	System.out.println(heap1);
+    	//System.out.println(heap1);
 
         for (int v : vals) {
             heap1.insert(v);
-        	System.out.println(heap1);
+        	//System.out.println(heap1);
+        	
         	
             if(!heap1.isValid()) {
             	System.out.println("ERROR INSERT");
             }
-            else
-            	System.out.println("SUCCESS INSERT");
+            
+            	//System.out.println("SUCCESS INSERT");
             	
+            //System.out.println("\n");
         }
         
-        Arrays.sort(vals);
+        //Arrays.sort(vals);
+        
+        System.out.println(heap1.map);
         for (int v : vals) {
-          //  if (heap1.findMin() != v) {
-               // setFailed("min is "+v+" but findMin() says "+
-               //         heap1.findMin());
-              //  break;
-            }
-            heap1.deleteMin();
+        	if (!heap1.map.containsKey(v-7) && v-7 > 0)
+        		heap1.decreaseKey(v, v-7);
+            //System.out.println(v + " " + (v-7));
+            //System.out.println(heap1+ "\n");
             if(!heap1.isValid()) {
             	System.out.println("ERROR DELETEMIN");
             }
+        }
+        System.out.println(heap1.map);
+        
+        Integer [] vals2 = heap1.map.keySet().toArray(new Integer[vals.length] );
+        for (int v : vals2) {
+            heap1.delete(v);
+            //System.out.println(v + " " + (v-7));
+            //System.out.println(heap1+ "\n");
+            if(!heap1.isValid()) {
+            	System.out.println("ERROR DELETEMIN");
+            }
+        }
+        
+        if(heap1.empty()) {
+        	System.out.println("yey 2");
+        }
             
         
 	}
@@ -43,7 +61,7 @@ public class TEST {
 
         for (int i = 0; i < n; ++i){
             while (true) {
-                int j, randInt = randomGenerator.nextInt(maxValue);
+                int j, randInt = randomGenerator.nextInt(maxValue)+10;
 
                 for (j = 0; j < i && randInt != values[j]; ++j);
                 if (j < i) {

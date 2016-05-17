@@ -359,7 +359,7 @@ public class BinomialHeapTest {
                     break;
                 }
                 for (int j = 0; j < i; ++j) {
-                    heap1.insert(i);
+                    heap1.insert(j);
                     ++size;
                     if (heap1.empty()) {
                         setFailed(
@@ -379,9 +379,13 @@ public class BinomialHeapTest {
                                 "not empty but empty() returns true");
                         break;
                     }
+                    //System.out.println(heap1 +"\n");
+                    //System.out.println(j +" "+i);
                     heap1.deleteMin();
+                    //System.out.println(heap1 +"\n");
                     --size;
                     if (heap1.size() != size) {
+                    	System.out.println("size error");
                         setFailed("size is "+size+
                                 " but size() returns "+
                                 heap1.size());
@@ -413,7 +417,7 @@ public class BinomialHeapTest {
                     break;
                 }
                 for (int j = 0; j < i; ++j) {
-                    heap1.insert(i);
+                    heap1.insert(j);
                     ++nInsert;
                     if (!heap1.isValid()) {
                         setFailed(
@@ -431,6 +435,7 @@ public class BinomialHeapTest {
                                 " deteles");
                         break;
                     }
+                    
                     heap1.deleteMin();
                     ++nDelete;
                 }

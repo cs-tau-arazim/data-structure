@@ -8,7 +8,7 @@ import java.util.HashMap;
  * exercise from previous semester.
  */
 public class BinomialHeap {
-	private HashMap<Integer, HeapNode> map;
+	public HashMap<Integer, HeapNode> map;
 	private HeapNode head;
 	private HeapNode min;
 	private int size;
@@ -54,9 +54,22 @@ public class BinomialHeap {
 				newNode.next = node2;
 				node2 = node2.next;
 			}
+			newNode = newNode.next;
 		}
 
 		// Iterate remaining nodes
+		while (node1 != null) {
+			newNode.next = node1;
+			node1 = node1.next;
+			newNode = newNode.next;
+		}
+		
+		while (node2 != null) {
+			newNode.next = node2;
+			node2 = node2.next;
+			newNode = newNode.next;
+
+		}
 		return newHead;
 	}
 
@@ -90,12 +103,13 @@ public class BinomialHeap {
 		}
 
 		LinkedList<Integer> list = new LinkedList<Integer>();
-		while (node.next != null) {
+		while (node != null) {
 			list.add(node.degree); // Operates at O(1)
 			numNodes++;
+			node = node.next;
 		}
 
-		boolean[] arr = new boolean[list.get(numNodes - 1)];
+		boolean[] arr = new boolean[list.get(numNodes -1) + 1];
 		for (int i = 0; i < arr.length; i++) {
 			if (list.get(index) == i) {
 				arr[i] = true;
@@ -222,7 +236,10 @@ public class BinomialHeap {
 	 *
 	 */
 	public void delete(int value) {
+		//System.out.println(this);
 		this.decreaseKey(value, Integer.MIN_VALUE);
+		//System.out.println(value);
+		//System.out.println(this);
 		this.deleteMin();
 	}
 
@@ -270,39 +287,51 @@ public class BinomialHeap {
     		return;
     	
     	this.map.remove(this.min.key);
+    	this.size -= 1;
     	HeapNode x = this.min;
     	if (x == this.head)
     		this.head = x.next;
     	else
     	{
-	    	HeapNode prevX = this.head;
-	    	while (prevX.next != x)
-	    		prevX = prevX.next;
-	    	prevX.next = x.next;
+	    	HeapNode prev = this.head;
+	    	HeapNode current = this.head;
+	    	while (current != x)
+	    	{
+	    		prev = current;
+	    		current = current.next;
+	    	}
+	    	prev.next = x.next;
     	}
+    	
     	HeapNode newMin = this.head;
     	this.min = newMin;
-    	while (newMin.next != null)
+    	while (newMin != null)
     	{
-    		newMin = newMin.next;
     		if (newMin.key < this.min.key)
     			this.min = newMin;
+    		newMin = newMin.next;
     	}
+    	
     	BinomialHeap h = new BinomialHeap();
+    	if (x.child == null)
+    		return;
     	HeapNode prev = null;
     	HeapNode current = x.child;
     	HeapNode next = current.next;
+    	h.min = current;
     	while(next != null)
     	{
     		current.next = prev;
     		prev = current;
     		current = next;
     		next = next.next;
+    		if (current.key < h.min.key)
+    			h.min = current;
     	}
     	current.next = prev;
     	h.head = current;
     	meld(h);
-    	this.size -= 1;
+    	
     }
 
    /**
@@ -329,7 +358,7 @@ public class BinomialHeap {
     		this.head = heap2.head;
     		this.map = heap2.map;
     		this.min = heap2.min;
-    		this.size = heap2.size;
+    		this.size += heap2.size;
     		return;
     	}
     	
@@ -359,7 +388,7 @@ public class BinomialHeap {
     		else if (x.key <= nextX.key)
     		{
     			x.next = nextX.next;
-    			binominalLink(x, nextX);
+    			binominalLink(nextX, x);
     		}
     		else 
     		{
@@ -374,6 +403,7 @@ public class BinomialHeap {
     			binominalLink(x, nextX);
     			x = nextX;
     		}
+    		nextX = x.next;
     	}
     }
     
@@ -403,6 +433,8 @@ public class BinomialHeap {
     	if (x == null)
     		return;
     	x.key = newValue;
+    	map.remove(oldValue);
+    	map.put(newValue, x);
     	if (newValue < this.min.key)
 	    	this.min = x;
     	HeapNode y = x;
@@ -412,9 +444,13 @@ public class BinomialHeap {
     		int temp = y.key;
     		y.key = z.key;
     		z.key = temp;
+    		map.put(y.key, y);
+    		map.put(z.key, z);
     		y = z;
     		z = y.parent;
     	}
+    	if (newValue < this.min.key)
+	    	this.min = y;
     }
     
    /**
@@ -447,7 +483,13 @@ public class BinomialHeap {
 		}
 		
 		public String toString() {
-			return "(key:" + this.key + ", degree: " +this.degree+")";
+			int pKey = -1;
+			if (this.parent != null)
+				pKey = this.parent.key;
+			int nKey = -1;
+			if (this.next != null)
+				nKey = this.next.key;
+			return "(key:" + this.key + ", degree: " +this.degree+", parent key: " + pKey + ", next key: " + nKey +")";
 		}
 	}
 
