@@ -132,15 +132,74 @@ public class BinomialHeap {
 	 * 
 	 */
 	public boolean isValid() {
+		HeapNode node = this.head;
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		int children;
+		int minKey = Integer.MAX_VALUE;
 		
+		while(node != null) {
+			children = numOfChildren(node);
+			if (!isValidTree(node, children))
+				return false;
+			if (list.contains(children)) { // check if there are two trees of same size
+				return false;
+			}
+			list.add(children);
+			if (node.key < minKey)
+				minKey = node.key;
+		}
+		if (minKey != min.key)
+			return false; // check if the minimum really is the minimum key
 		
-		
-		return false; // should be replaced by student code
+		// calculate number of nodes.
+		// if the code made it this far, then all trees are legal
+		// and each k-degree tree has exactly 2^k nodes.
+		double sum = 0;
+		for(int i: list) {
+			sum += Math.pow(2, i);
+		}
+		if ((int)sum != this.size)
+			return false;
+
+		return true;
 	}
 
-	private int numOfChildren() {
-		
+	/**
+	 * private int numOfChildren()
+	 *
+	 * Returns number of children of node.
+	 * Helper function for isValid. theoretically, numOfChildren(node) == node.degree
+	 * for every node in the heap.
+	 * 
+	 */
+	private int numOfChildren(HeapNode node) {
+		HeapNode child = node.child;
+		int count = 0;
+		while(child != null) {
+			count++;
+			child = child.next;
+		}
+		return count;
 	}
+	
+	private boolean isValidTree(HeapNode node, int degree) {
+		HeapNode child = node.child;
+		int k = degree;
+		
+		while(child != null) {
+			k--;
+			if (child.key < node.key) // checking heap rule
+				return false;
+			if (!isValidTree(child, k)) // check valid son
+				return false;
+			child = child.next;
+		}
+		if (k > 0)
+			return false; // not enough children
+		return true;
+	}
+	
+	
 	
 	/**
 	 * public void delete(int value)
