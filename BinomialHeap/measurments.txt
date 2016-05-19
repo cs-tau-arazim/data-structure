@@ -1,0 +1,23 @@
+measurments:
+
+m = 1000
+502
+[true, true, true, true, true, true, true, true, true]
+511
+[false, false, false, false, false, false, false, false, false, true]
+
+
+m = 2000
+1013
+[true, true, true, true, true, true, true, true, true, true]
+1023
+[false, false, false, false, false, false, false, false, false, false, true]
+
+
+m = 3000
+2036
+[true, true, true, true, true, true, true, true, true, true, true]
+2047
+[false, false, false, false, false, false, false, false, false, false, false, true]
+
+

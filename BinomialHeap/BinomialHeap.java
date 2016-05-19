@@ -8,7 +8,8 @@ import java.util.HashMap;
  * exercise from previous semester.
  */
 public class BinomialHeap {
-	private HashMap<Integer, HeapNode> map;
+	public int count = 0; // TODO remove
+	public HashMap<Integer, HeapNode> map; //TODO change to private
 	private HeapNode head;
 	private HeapNode min;
 	private int size;
@@ -183,7 +184,7 @@ public class BinomialHeap {
 		// special cases
 		if (this.empty()) {
 			this.head = heap2.head;
-			this.map = heap2.map;
+			this.map.putAll(heap2.map);
 			this.min = heap2.min;
 			this.size += heap2.size;
 			return;
@@ -469,11 +470,11 @@ public class BinomialHeap {
 	 *
 	 */
 	public void delete(int value) {
-		// System.out.println(this);
-		this.decreaseKey(value, Integer.MIN_VALUE);
-		// System.out.println(value);
-		// System.out.println(this);
-		this.deleteMin();
+		if (this.map.containsKey(value))
+		{
+			this.decreaseKey(value, Integer.MIN_VALUE);
+			this.deleteMin();
+		}
 	}
 
 
@@ -520,6 +521,7 @@ public class BinomialHeap {
 	}
 
 	private void binominalLink(HeapNode y, HeapNode z) {
+		this.count++; //TODO Remove
 		y.parent = z;
 		y.next = z.child;
 		z.child = y;

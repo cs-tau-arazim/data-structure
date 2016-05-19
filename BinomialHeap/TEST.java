@@ -4,7 +4,7 @@ import java.util.Random;
 public class TEST {
 	public static void main(String[]args) {
 
-		/*
+		
         int[] vals = createValues(100);
         BinomialHeap heap1 = new BinomialHeap();
     	//System.out.println(heap1);
@@ -40,6 +40,8 @@ public class TEST {
         Integer [] vals2 = heap1.map.keySet().toArray(new Integer[vals.length] );
         for (int v : vals2) {
             heap1.delete(v);
+            //System.out.println(heap1);
+
             //System.out.println(v + " " + (v-7));
             //System.out.println(heap1+ "\n");
             if(!heap1.isValid()) {
@@ -47,13 +49,11 @@ public class TEST {
             }
         }
         
-        if(heap1.empty()) {
-        	System.out.println("yey 2");
-        }
-            
-        */
-		
-		test2.
+       
+        System.out.println(heap1.empty());
+        
+        //System.out.println(heap1.map);
+        System.out.println(heap1);
 	}
 
     private static int[] createValues(int n) {
