@@ -8,8 +8,7 @@ import java.util.HashMap;
  * exercise from previous semester.
  */
 public class BinomialHeap {
-	public int count = 0; // TODO remove
-	public HashMap<Integer, HeapNode> map; //TODO change to private
+	private HashMap<Integer, HeapNode> map;
 	private HeapNode head;
 	private HeapNode min;
 	private int size;
@@ -95,9 +94,8 @@ public class BinomialHeap {
 		h.min = x;
 		h.size = 1;
 		h.map.put(value, x);
-		meld(h); 
+		meld(h);
 	}
-
 
 	/**
 	 * public void deleteMin()
@@ -114,7 +112,7 @@ public class BinomialHeap {
 		this.map.remove(this.min.key);
 		this.size -= 1;
 		HeapNode x = this.min;
-	
+
 		// remove from root list
 		if (x == this.head)
 			this.head = x.next;
@@ -145,7 +143,7 @@ public class BinomialHeap {
 		HeapNode current = x.child;
 		HeapNode next = current.next;
 		h.min = current;
-		
+
 		// change children's order
 		while (next != null) {
 			current.next = prev;
@@ -157,12 +155,12 @@ public class BinomialHeap {
 		}
 		current.next = prev;
 		h.head = current;
-		
+
 		// meld with original heap
 		meld(h);
 
 	}
-	
+
 	/**
 	 * public int findMin()
 	 *
@@ -172,7 +170,6 @@ public class BinomialHeap {
 	public int findMin() {
 		return this.min.key;
 	}
-
 
 	/**
 	 * public void meld (BinomialHeap heap2)
@@ -229,7 +226,6 @@ public class BinomialHeap {
 			nextX = x.next;
 		}
 	}
-	
 
 	/**
 	 * HeapNode binomialHeapMerge(BinomialHeap h)
@@ -290,6 +286,32 @@ public class BinomialHeap {
 		return newHead;
 	}
 
+	/**
+	 * public int size()
+	 *
+	 * Return the number of elements in the heap
+	 * 
+	 */
+	public int size() {
+		return this.size; // should be replaced by student code
+	}
+
+	/**
+	 * public void arrayToHeap()
+	 *
+	 * Insert the array to the heap. Delete previous elemnts in the heap.
+	 * 
+	 */
+	public void arrayToHeap(int[] array) {
+		BinomialHeap newHeap = new BinomialHeap();
+		for (int i = 0; i < array.length; i++) { // insert all values
+			newHeap.insert(array[i]);
+		}
+		this.head = newHeap.head;
+		this.min = newHeap.min;
+		this.size = newHeap.size;
+		this.map = newHeap.map;
+	}
 
 	/**
 	 * public int minTreeRank()
@@ -337,18 +359,16 @@ public class BinomialHeap {
 				arr[i] = false;
 			}
 		}
-		
+
 		return arr;
 	}
-
-	
 
 	/**
 	 * public boolean isValid()
 	 *
-	 * Returns true if and only if the heap is valid.
-	 * Meaning, it maintains all of the heap's properties,
-	 * and all of it's trees maintain the binomial tree properties.
+	 * Returns true if and only if the heap is valid. Meaning, it maintains all
+	 * of the heap's properties, and all of it's trees maintain the binomial
+	 * tree properties.
 	 * 
 	 */
 	public boolean isValid() {
@@ -359,13 +379,13 @@ public class BinomialHeap {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		int children;
 		int minKey = Integer.MAX_VALUE;
-		
+
 		while (node != null) { // for each root
-			
+
 			// calculate number of children
 			children = numOfChildren(node);
-			
-			// check if valid tree recursively 
+
+			// check if valid tree recursively
 			if (!isValidTree(node, children)) {
 				System.out.println("Invalid tree structure");
 
@@ -378,7 +398,7 @@ public class BinomialHeap {
 
 				return false;
 			}
-			list.add(children);
+			list.add(children); // save minimum
 			if (node.key < minKey)
 				minKey = node.key;
 			node = node.next;
@@ -421,9 +441,9 @@ public class BinomialHeap {
 	}
 
 	/**
-	 * boolean isValidTree(HeapNode node, int degree)
-	 * given a root HeapNode, and the degree it *should* have, the function
-	 * checks recursively that the tree is indeed a binomial tree of given degree.
+	 * boolean isValidTree(HeapNode node, int degree) given a root HeapNode, and
+	 * the degree it *should* have, the function checks recursively that the
+	 * tree is indeed a binomial tree of given degree.
 	 * 
 	 */
 	private boolean isValidTree(HeapNode node, int degree) {
@@ -443,24 +463,6 @@ public class BinomialHeap {
 		return true;
 	}
 
-	
-	/**
-	 * public void arrayToHeap()
-	 *
-	 * Insert the array to the heap. Delete previous elemnts in the heap.
-	 * 
-	 */
-	public void arrayToHeap(int[] array) {
-		BinomialHeap newHeap = new BinomialHeap();
-		for (int i = 0; i < array.length; i++) {
-			newHeap.insert(array[i]);
-		}
-		this.head = newHeap.head;
-		this.min = newHeap.min;
-		this.size = newHeap.size;
-		this.map = newHeap.map;
-	}
-
 	/**
 	 * public void delete(int value)
 	 *
@@ -475,18 +477,6 @@ public class BinomialHeap {
 			this.decreaseKey(value, Integer.MIN_VALUE);
 			this.deleteMin();
 		}
-	}
-
-
-
-	/**
-	 * public int size()
-	 *
-	 * Return the number of elements in the heap
-	 * 
-	 */
-	public int size() {
-		return this.size; // should be replaced by student code
 	}
 
 	/**
@@ -520,9 +510,14 @@ public class BinomialHeap {
 			this.min = y;
 	}
 
+	/**
+	 * private void binominalLink(HeapNode y, HeapNode z)
+	 * 
+	 * receives two nodes y and z, and link them so y is the child of z.
+	 * 
+	 */
 	private void binominalLink(HeapNode y, HeapNode z) {
-		this.count++; //TODO Remove
-		y.parent = z;
+		y.parent = z; 
 		y.next = z.child;
 		z.child = y;
 		z.degree += 1;
