@@ -317,6 +317,7 @@ public class BinomialHeap {
 			return arr;
 		}
 
+		// count number of nodes in the root list
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		while (node != null) {
 			list.add(node.degree); // Operates at O(1)
@@ -324,8 +325,10 @@ public class BinomialHeap {
 			node = node.next;
 		}
 
+		// create array
 		boolean[] arr = new boolean[list.get(numNodes - 1) + 1];
 		for (int i = 0; i < arr.length; i++) {
+			// set appropriate values
 			if (list.get(index) == i) {
 				arr[i] = true;
 				index++;
@@ -333,31 +336,18 @@ public class BinomialHeap {
 				arr[i] = false;
 			}
 		}
-
+		
 		return arr;
 	}
 
-	/**
-	 * public void arrayToHeap()
-	 *
-	 * Insert the array to the heap. Delete previous elemnts in the heap.
-	 * 
-	 */
-	public void arrayToHeap(int[] array) {
-		BinomialHeap newHeap = new BinomialHeap();
-		for (int i = 0; i < array.length; i++) {
-			newHeap.insert(array[i]);
-		}
-		this.head = newHeap.head;
-		this.min = newHeap.min;
-		this.size = newHeap.size;
-		this.map = newHeap.map;
-	}
+	
 
 	/**
 	 * public boolean isValid()
 	 *
 	 * Returns true if and only if the heap is valid.
+	 * Meaning, it maintains all of the heap's properties,
+	 * and all of it's trees maintain the binomial tree properties.
 	 * 
 	 */
 	public boolean isValid() {
@@ -368,9 +358,13 @@ public class BinomialHeap {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		int children;
 		int minKey = Integer.MAX_VALUE;
-
-		while (node != null) {
+		
+		while (node != null) { // for each root
+			
+			// calculate number of children
 			children = numOfChildren(node);
+			
+			// check if valid tree recursively 
 			if (!isValidTree(node, children)) {
 				System.out.println("Invalid tree structure");
 
@@ -417,6 +411,7 @@ public class BinomialHeap {
 	private int numOfChildren(HeapNode node) {
 		HeapNode child = node.child;
 		int count = 0;
+		// calculate number of children
 		while (child != null) {
 			count++;
 			child = child.next;
@@ -424,6 +419,12 @@ public class BinomialHeap {
 		return count;
 	}
 
+	/**
+	 * boolean isValidTree(HeapNode node, int degree)
+	 * given a root HeapNode, and the degree it *should* have, the function
+	 * checks recursively that the tree is indeed a binomial tree of given degree.
+	 * 
+	 */
 	private boolean isValidTree(HeapNode node, int degree) {
 		HeapNode child = node.child;
 		int k = degree;
@@ -439,6 +440,24 @@ public class BinomialHeap {
 		if (k > 0)
 			return false; // not enough children
 		return true;
+	}
+
+	
+	/**
+	 * public void arrayToHeap()
+	 *
+	 * Insert the array to the heap. Delete previous elemnts in the heap.
+	 * 
+	 */
+	public void arrayToHeap(int[] array) {
+		BinomialHeap newHeap = new BinomialHeap();
+		for (int i = 0; i < array.length; i++) {
+			newHeap.insert(array[i]);
+		}
+		this.head = newHeap.head;
+		this.min = newHeap.min;
+		this.size = newHeap.size;
+		this.map = newHeap.map;
 	}
 
 	/**
