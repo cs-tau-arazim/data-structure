@@ -398,8 +398,14 @@ public class BinomialHeap {
 
 				return false;
 			}
-			list.add(children); // save minimum
-			if (node.key < minKey)
+			if (list.size() > 0) // check list of roots is ordered
+			{
+				if (children < list.get(0)) {
+					return false;
+				}
+			}
+			list.add(children);
+			if (node.key < minKey) // save minimum
 				minKey = node.key;
 			node = node.next;
 		}
