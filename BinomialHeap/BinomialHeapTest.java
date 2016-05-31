@@ -337,6 +337,26 @@ public class BinomialHeapTest {
         }
     }
 
+    static private class TestDelete extends Test {
+        public TestDelete() {
+            super("Check delete after each delete");
+        }
+
+        protected void test() {
+
+            int[] vals = createValues(100);
+            BinomialHeap heap1 = new BinomialHeap();
+
+            for (int v : vals) {
+                heap1.insert(v);
+            }
+            Arrays.sort(vals);
+            for (int v : vals) {
+            	heap1.delete(v);
+            }
+        }
+    }
+    
     static private class TestEmpty extends Test {
         public TestEmpty() {
             super("Check empty/size after insert and deleteMin");
@@ -634,7 +654,8 @@ public class BinomialHeapTest {
             new TestArrayToHeap1(),
             new TestArrayToHeap2(),
             new TestBinaryRep(),
-            new TestMinTreeRank()
+            new TestMinTreeRank(),
+            new TestDelete()
         };
 
         for (Test test : tests) {

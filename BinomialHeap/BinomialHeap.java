@@ -6,6 +6,14 @@ import java.util.HashMap;
  *
  * An implementation of binomial heap over non-negative integers. Based on
  * exercise from previous semester.
+ * 
+ * Authors:
+ * 
+ * Gal Wiernik
+ * galwiernik 208884213
+ * 
+ * Tom Segal
+ * tomsegal 208945519
  */
 public class BinomialHeap {
 	private HashMap<Integer, HeapNode> map;
@@ -211,7 +219,7 @@ public class BinomialHeap {
 			if (x.degree != nextX.degree || (nextX.next != null && nextX.next.degree == x.degree)) {
 				prevX = x;
 				x = nextX;
-			} else if (x.key <= nextX.key) {
+			} else if (x.key <= nextX.key) { // check all cases
 				x.next = nextX.next;
 				binominalLink(nextX, x);
 			} else {
@@ -480,7 +488,7 @@ public class BinomialHeap {
 	public void delete(int value) {
 		if (this.map.containsKey(value))
 		{
-			this.decreaseKey(value, Integer.MIN_VALUE);
+			this.decreaseKey(value, Integer.MIN_VALUE); // set to minimum value possible
 			this.deleteMin();
 		}
 	}
@@ -497,13 +505,13 @@ public class BinomialHeap {
 		if (x == null)
 			return;
 		x.key = newValue;
-		map.remove(oldValue);
+		map.remove(oldValue); // change value in hashtable
 		map.put(newValue, x);
 		if (newValue < this.min.key)
 			this.min = x;
 		HeapNode y = x;
 		HeapNode z = y.parent;
-		while (z != null && y.key < z.key) {
+		while (z != null && y.key < z.key) { // move key up to avoid violating heap rule
 			int temp = y.key;
 			y.key = z.key;
 			z.key = temp;
@@ -512,7 +520,7 @@ public class BinomialHeap {
 			y = z;
 			z = y.parent;
 		}
-		if (newValue < this.min.key)
+		if (newValue < this.min.key) // update minimum
 			this.min = y;
 	}
 
@@ -526,9 +534,14 @@ public class BinomialHeap {
 		y.parent = z; 
 		y.next = z.child;
 		z.child = y;
-		z.degree += 1;
+		z.degree += 1; // update degree
 	}
 
+	/**
+	 * public String toString()
+	 * 
+	 * helper function for debugging.
+	 */
 	public String toString() {
 		if (empty())
 			return "empty";
